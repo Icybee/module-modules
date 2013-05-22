@@ -2,6 +2,8 @@
 
 Manages [Icybee](http://icybee.org/) modules.
 
+![](http://icybee.org/public/resources/github/module-modules.png)
+
 
 
 
