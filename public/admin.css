@@ -1,40 +1,40 @@
-.block--modules-manage tr {
+.listview tr {
 	cursor: auto;
 }
 
-.block--modules-manage tr + tr td
+.listview tr + tr td
 {
 	border-top: 1px solid #EEE;
 }
 
-.block--modules-manage .cell--key {
+.listview .cell--key {
 	text-align: right;
 	width: 10px;
 }
 
-.block--modules-manage .cell--key input:disabled {
+.listview .cell--key input:disabled {
 	visibility: hidden;
 }
 
-.block--modules-manage .cell--title {
+.listview .cell--title {
 	padding-top: 1em;
 	padding-bottom: 1em;
 	max-width: 48ex;
 }
 
-.block--modules-manage .cell--title .small {
+.listview .cell--title .small {
 	margin-top: .5em;
 }
 
-.block--modules-manage .cell--dependency {
+.listview .cell--dependency {
 	font-size: .8571em;
 	line-height: 1.5em;
 }
 
-.block--modules-manage .cell--install .alert {
+.listview .cell--install .alert {
 	margin: 0;
 }
 
-.block--modules-manage .cell--install .not-applicable {
+.listview .cell--install .not-applicable {
 	font-size: .8571em;
 }

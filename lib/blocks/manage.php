@@ -20,10 +20,11 @@ use Brickrouge\A;
 use Brickrouge\Button;
 use Brickrouge\Element;
 use Brickrouge\Form;
+use Brickrouge\ListView;
 
 use Icybee\Element\ActionbarToolbar;
 
-class ManageBlock extends Form
+class ManageBlock extends ListView
 {
 	static protected function add_assets(\Brickrouge\Document $document)
 	{
@@ -50,181 +51,181 @@ class ManageBlock extends Form
 		(
 			$attributes + array
 			(
-				'class' => 'form-primary block--modules-manage'
+				self::ENTRIES => array_values($core->modules->enabled_modules_descriptors),
+				self::COLUMNS => array
+				(
+					'key' =>        __CLASS__ . '\KeyColumn',
+					'title' =>      __CLASS__ . '\TitleColumn',
+					'version' =>    __CLASS__ . '\VersionColumn',
+					'dependency' => __CLASS__ . '\DependencyColumn',
+					'install' =>    __CLASS__ . '\InstallColumn',
+					'configure' =>  __CLASS__ . '\ConfigureColumn'
+				),
+
+				'class' => 'form-primary'
 			)
 		);
 
 		$this->attach_buttons();
-
-		$this->hiddens[Operation::DESTINATION] = $module;
-		$this->hiddens[Operation::NAME] = Module::OPERATION_DEACTIVATE;
 	}
 
-	protected function get_columns()
+	/**
+	 * The title and the category of the entries (descriptors) are translated and stored under
+	 * `__i18n_title` and `__i18n_category` respectively. The entries (descriptors) are ordered
+	 * according to their translated title.
+	 */
+	protected function get_entries()
 	{
-		return array
+		$entries = parent::get_entries();
+
+		foreach ($entries as &$descriptor)
+		{
+			$descriptor['__i18n_title'] = self::resolve_module_title($descriptor[Module::T_ID]);
+			$descriptor['__i18n_category'] = self::translate_module_category($descriptor);
+		}
+
+		unset($descriptor);
+
+		usort($entries, function($a, $b) {
+
+			return \ICanBoogie\unaccent_compare_ci($a['__i18n_title'], $b['__i18n_title']);
+
+		});
+
+		return $entries;
+	}
+
+	protected function render_rows(array $rows)
+	{
+		$rendered_rows = parent::render_rows($rows);
+		$entries = $this->entries;
+		$grouped = array();
+
+		foreach ($rendered_rows as $i => $row)
+		{
+			$descriptor = $entries[$i];
+			$grouped[$descriptor['__i18n_category']][$i] = $row;
+		}
+
+		uksort($grouped, 'ICanBoogie\unaccent_compare_ci');
+
+		$span = count($rendered_rows) - 2;
+		$rendered_rows = array();
+
+		foreach ($grouped as $group_title => $rows)
+		{
+			$rendered_rows[] = <<<EOT
+<tr class="listview-divider">
+	<td>&nbsp;</td>
+	<td>$group_title</td>
+	<td colspan="$span">&nbsp;</td>
+</tr>
+EOT;
+			foreach ($rows as $row)
+			{
+				$rendered_rows[] = $row;
+			}
+		}
+
+		return $rendered_rows;
+	}
+
+	protected function decorate($html)
+	{
+		$operation_destination_name = \ICanBoogie\Operation::DESTINATION;
+		$operation_destination_value = $this->module->id;
+		$operation_name = \ICanBoogie\Operation::NAME;
+		// TODO-20130702: Fix the following hack:
+		$operation_value = ($this instanceof InactivesBlock) ? Module::OPERATION_ACTIVATE : Module::OPERATION_DEACTIVATE;
+
+		return <<<EOT
+<form action="" method="POST" class="form-primary">
+	<input type="hidden" name="{$operation_destination_name}" value="$operation_destination_value" />
+	<input type="hidden" name="{$operation_name}" value="$operation_value" />
+
+	$html
+</form>
+EOT;
+	}
+
+	protected function attach_buttons()
+	{
+		global $core;
+
+		$core->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
+
+			$event->buttons[] = new Button
+			(
+				'Disable selected modules', array
+				(
+					'class' => 'btn-primary btn-danger',
+					'type' => 'submit',
+					'data-target' => '.form-primary'
+				)
+			);
+
+		});
+	}
+
+	static public function resolve_module_title($module_id)
+	{
+		global $core;
+
+		return I18n\t
 		(
-			'key' => array
+			'module_title.' . strtr($module_id, '.', '_'), array(), array
 			(
-				'label' => null
-			),
-
-			'title' => array
-			(
-				'label' => 'Module'
-			),
-
-			'version' => array
-			(
-				'label' => 'Version'
-			),
-
-			'dependency' => array
-			(
-				'label' => 'Dependency'
-			),
-
-			'install' => array
-			(
-				'label' => 'Installed'
-			),
-
-			'configure' => array
-			(
-				'label' => null
+				'default' => isset($core->modules->descriptors[$module_id]) ? $core->modules->descriptors[$module_id][Module::T_TITLE] : $module_id
 			)
 		);
 	}
 
-	protected function get_descriptors()
+	static public function translate_module_category(array $descriptor)
+	{
+		$category = $descriptor[Module::T_CATEGORY];
+
+		if (!$category)
+		{
+			list($category) = explode('.', $descriptor[Module::T_ID]);
+		}
+
+		return I18n\t($category, array(), array('scope' => 'module_category', 'default' => ucfirst($category)));
+	}
+}
+
+namespace Icybee\Modules\Modules\ManageBlock;
+
+use ICanBoogie\I18n;
+use ICanBoogie\Module;
+use ICanBoogie\Operation;
+
+use Brickrouge\A;
+use Brickrouge\Element;
+use Brickrouge\ListViewColumn;
+
+use Icybee\Modules\Modules\ManageBlock;
+
+/**
+ * Representation of the `key` column.
+ */
+class KeyColumn extends ListViewColumn
+{
+	public function __construct(ManageBlock $listview, $id, array $options=array())
+	{
+		parent::__construct
+		(
+			$listview, $id, $options + array
+			(
+				'title' => null
+			)
+		);
+	}
+
+	public function render_cell($descriptor)
 	{
 		global $core;
 
-		return $core->modules->enabled_modules_descriptors;
-	}
-
-	protected function get_categories()
-	{
-		$categories = array();
-		$modules = array();
-
-		$descriptors = $this->descriptors;
-		self::sort_descriptors($descriptors);
-
-		foreach ($descriptors as $id => $descriptor)
-		{
-			$category = $descriptor[Module::T_CATEGORY];
-
-			if (!$category)
-			{
-				list($category) = explode('.', $id);
-			}
-
-			$category = I18n\t($category, array(), array('scope' => 'module_category', 'default' => ucfirst($category)));
-			$categories[$category][$id] = $descriptor;
-		}
-
-		uksort($categories, 'ICanBoogie\unaccent_compare_ci');
-
-		return $categories;
-	}
-
-	protected function render_inner_html()
-	{
-		global $core;
-
-		#
-		# read and sort packages and modules
-		#
-
-		$categories = $this->categories;
-		$columns = $this->columns;
-
-		$body = '';
-		$span = count($columns);
-
-		foreach ($categories as $category => $descriptors)
-		{
-			$sub = null;
-
-			foreach ($descriptors as $module_id => $descriptor)
-			{
-				$sub .= '<tr>';
-				$sub .= $this->render_body_row($columns, $descriptor, $module_id);
-				$sub .= '</tr>';
-			}
-
-			if ($sub)
-			{
-				$body .= $this->render_category_row($category, $span) . $sub;
-			}
-		}
-
-		$hiddens = $this->render_hiddens($this->hiddens);
-		$thead = $this->render_head($columns);
-
-		return <<<EOT
-$hiddens
-
-<table class="manage" cellpadding="4" cellspacing="0">
-	$thead
-
-	<tbody>
-		$body
-	</tbody>
-</table>
-EOT;
-	}
-
-	protected function render_head(array $columns)
-	{
-		$html = '';
-
-		foreach ($columns as $id => $column)
-		{
-			$html .= '<th><div>' . ($column['label'] ? I18n\t($column['label'], array(), array('scope' => 'title')) : '&nbsp;') . '</div></th>';
-		}
-
-		return <<<EOT
-<thead>
-	<tr>
-	$html
-	</tr>
-</thead>
-EOT;
-	}
-
-	protected function render_category_row($category, $span)
-	{
-		$span--;
-
-		return <<<EOT
-<tr class="section-title">
-	<td class="cell--key">&nbsp;</td><td colspan="$span">$category</td>
-</tr>
-EOT;
-	}
-
-	protected function render_body_row(array $columns, array $descriptor, $module_id)
-	{
-		$html = '';
-
-		foreach ($columns as $column_id => $column)
-		{
-			$callback = 'render_cell_' . $column_id;
-
-			$html .= '<td class="cell--' . $column_id . '">';
-			$html .= $this->$callback($descriptor, $module_id) ?: '&nbsp';
-			$html .= '</td>';
-		}
-
-		return $html;
-	}
-
-	protected function render_cell_key(array $descriptor, $module_id)
-	{
-		global $core;
-
+		$module_id = $descriptor[Module::T_ID];
 		$disabled = $descriptor[Module::T_REQUIRED];
 
 		if ($core->modules->usage($module_id))
@@ -241,10 +242,28 @@ EOT;
 			)
 		);
 	}
+}
 
-	protected function render_cell_title(array $descriptor, $module_id)
+/**
+ * Representation of the `title` column.
+ */
+class TitleColumn extends ListViewColumn
+{
+	public function __construct(ManageBlock $listview, $id, array $options=array())
 	{
-		$title = $descriptor['_locale_title'];
+		parent::__construct
+		(
+			$listview, $id, $options + array
+			(
+				'title' => 'Module'
+			)
+		);
+	}
+
+	public function render_cell($descriptor)
+	{
+		$module_id = $descriptor[Module::T_ID];
+		$title = $descriptor['__i18n_title'];
 
 		$html = \ICanBoogie\Routes::get()->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
 
@@ -263,8 +282,25 @@ EOT;
 
 		return $html;
 	}
+}
 
-	protected function render_cell_version(array $descriptor, $moduleid)
+/**
+ * Representation of the `version` column.
+ */
+class VersionColumn extends ListViewColumn
+{
+	public function __construct(ManageBlock $listview, $id, array $options=array())
+	{
+		parent::__construct
+		(
+			$listview, $id, $options + array
+			(
+				'title' => 'Version'
+			)
+		);
+	}
+
+	public function render_cell($descriptor)
 	{
 		$version = $descriptor[Module::T_VERSION];
 
@@ -275,17 +311,35 @@ EOT;
 
 		return '<span class="small lighter">' . $version . '</span>';
 	}
+}
 
-	protected function render_cell_dependency(array $descriptor, $module_id)
+/**
+ * Representation of the `dependency` column.
+ */
+class DependencyColumn extends ListViewColumn
+{
+	public function __construct(ManageBlock $listview, $id, array $options=array())
+	{
+		parent::__construct
+		(
+			$listview, $id, $options + array
+			(
+				'title' => 'Dependency'
+			)
+		);
+	}
+
+	public function render_cell($descriptor)
 	{
 		global $core;
 
 		$html = '';
 		$extends = $descriptor[Module::T_EXTENDS];
+		$module_id = $descriptor[Module::T_ID];
 
 		if ($extends)
 		{
-			$label = self::resolve_module_title($extends);
+			$label = ManageBlock::resolve_module_title($extends);
 			$class = isset($core->modules[$extends]) ? 'success' : 'warning';
 
 			$html .= '<div class="extends">Extends: ';
@@ -301,7 +355,7 @@ EOT;
 
 			foreach ($requires as $require_id => $version)
 			{
-				$label = self::resolve_module_title($require_id);
+				$label = ManageBlock::resolve_module_title($require_id);
 				$label_class = isset($core->modules[$require_id]) ? 'success' : 'warning';
 
 				$html .= <<<EOT
@@ -323,10 +377,29 @@ EOT;
 
 		return $html;
 	}
+}
 
-	protected function render_cell_install(array $descriptor, $module_id)
+/**
+ * Representation of the `install` column.
+ */
+class InstallColumn extends ListViewColumn
+{
+	public function __construct(ManageBlock $listview, $id, array $options=array())
+	{
+		parent::__construct
+		(
+			$listview, $id, $options + array
+			(
+				'title' => 'Installed'
+			)
+		);
+	}
+
+	public function render_cell($descriptor)
 	{
 		global $core;
+
+		$module_id = $descriptor[Module::T_ID];
 
 		try
 		{
@@ -459,10 +532,29 @@ EOT;
 
 		return $html;
 	}
+}
 
-	protected function render_cell_configure(array $descriptor, $module_id)
+/**
+ * Representation of the `configure` column.
+ */
+class ConfigureColumn extends ListViewColumn
+{
+	public function __construct(ManageBlock $listview, $id, array $options=array())
+	{
+		parent::__construct
+		(
+			$listview, $id, $options + array
+			(
+				'title' => null
+			)
+		);
+	}
+
+	public function render_cell($descriptor)
 	{
 		global $core;
+
+		$module_id = $descriptor[Module::T_ID];
 
 		if (empty($core->routes["admin:$module_id/config"]))
 		{
@@ -472,62 +564,5 @@ EOT;
 		$route = $core->routes["admin:$module_id/config"];
 
 		return new A('Configure', \ICanBoogie\Routing\contextualize($route->pattern));
-	}
-
-	static protected function sort_descriptors(array &$descriptors)
-	{
-		\ICanBoogie\stable_sort
-		(
-			$descriptors, function(&$descriptor)
-			{
-				$id = $descriptor[Module::T_ID];
-				$title = I18n\t
-				(
-					strtr($id, '.', '_'), array(), array
-					(
-						'scope' => 'module_title',
-						'default' => isset($descriptor[Module::T_TITLE]) ? $descriptor[Module::T_TITLE] : $id
-					)
-				);
-
-				$descriptor['_locale_title'] = $title;
-
-				return \ICanBoogie\remove_accents($title);
-			}
-		);
-	}
-
-	protected function attach_buttons()
-	{
-		global $core;
-
-		$core->events->attach
-		(
-			function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target)
-			{
-				$event->buttons[] = new Button
-				(
-					'Disable selected modules', array
-					(
-						'class' => 'btn-primary btn-danger',
-						'type' => 'submit',
-						'data-target' => '.form-primary'
-					)
-				);
-			}
-		);
-	}
-
-	static public function resolve_module_title($module_id)
-	{
-		global $core;
-
-		return I18n\t
-		(
-			'module_title.' . strtr($module_id, '.', '_'), array(), array
-			(
-				'default' => isset($core->modules->descriptors[$module_id]) ? $core->modules->descriptors[$module_id][Module::T_TITLE] : $module_id
-			)
-		);
 	}
 }
