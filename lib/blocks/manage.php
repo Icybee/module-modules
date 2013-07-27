@@ -193,9 +193,14 @@ EOT;
 	}
 }
 
+/*
+ * COLUMNS
+ */
+
 namespace Icybee\Modules\Modules\ManageBlock;
 
 use ICanBoogie\I18n;
+use ICanBoogie\I18n\FormattedString;
 use ICanBoogie\Module;
 use ICanBoogie\Operation;
 
@@ -492,7 +497,7 @@ class InstallColumn extends ListViewColumn
 			else if ($is_installed === false)
 			{
 				$btn = '<a class="btn btn-danger" href="'
-				. \ICanBoogie\Routing\contextualize("/admin/{$this->module}/{$module}/install")
+				. \ICanBoogie\Routing\contextualize("/admin/modules/{$module}/install")
 				. '">' . I18n\t('Install module') . '</a>';
 
 				$title = new FormattedString('The module %title is not properly installed', array('title' => $module->title));
