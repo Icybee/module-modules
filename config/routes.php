@@ -1,16 +1,18 @@
 <?php
 
+namespace Icybee\Modules\Modules;
+
 return array
 (
 	'!admin:manage' => array
 	(
-
+		'controller' => __NAMESPACE__ . '\ManageController'
 	),
 
 	'admin:modules/inactives' => array
 	(
 		'pattern' => '/admin/modules/inactives',
-		'controller' => 'Icybee\BlockController',
+		'controller' => __NAMESPACE__ . '\ManageController',
 		'title' => 'Inactives',
 		'block' => 'inactives'
 	),
@@ -18,7 +20,7 @@ return array
 	'admin:modules/install' => array
 	(
 		'pattern' => '/admin/modules/<[^/]+>/install',
-		'controller' => 'Icybee\BlockController',
+		'controller' => __NAMESPACE__ . '\ManageController',
 		'title' => 'Install',
 		'block' => 'install',
 		'visibility' => 'auto'
