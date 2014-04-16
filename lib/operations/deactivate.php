@@ -12,7 +12,6 @@
 namespace Icybee\Modules\Modules;
 
 use ICanBoogie\I18n;
-use ICanBoogie\I18n\FormattedString;
 
 /**
  * Deactivates the specified modules.
@@ -44,7 +43,7 @@ class DeactivateOperation extends \ICanBoogie\Operation
 
 				if ($n)
 				{
-					$errors[] = new FormattedString
+					$errors[] = $errors->format
 					(
 						'The module %title cannot be disabled, :count modules are using it.', array
 						(
