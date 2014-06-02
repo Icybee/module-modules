@@ -267,10 +267,12 @@ class TitleColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
+		global $core;
+
 		$module_id = $descriptor[Module::T_ID];
 		$title = $descriptor['__i18n_title'];
 
-		$html = \ICanBoogie\Routes::get()->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
+		$html = $core->routes->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
 
 		$description = I18n\t
 		(
