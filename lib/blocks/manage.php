@@ -12,9 +12,7 @@
 namespace Icybee\Modules\Modules;
 
 use ICanBoogie\I18n;
-use ICanBoogie\I18n\FormattedString;
 use ICanBoogie\Operation;
-use ICanBoogie\Route;
 
 use Brickrouge\A;
 use Brickrouge\Button;
@@ -132,9 +130,9 @@ EOT;
 
 	protected function decorate($html)
 	{
-		$operation_destination_name = \ICanBoogie\Operation::DESTINATION;
+		$operation_destination_name = Operation::DESTINATION;
 		$operation_destination_value = $this->module->id;
-		$operation_name = \ICanBoogie\Operation::NAME;
+		$operation_name = Operation::NAME;
 		// TODO-20130702: Fix the following hack:
 		$operation_value = ($this instanceof InactivesBlock) ? Module::OPERATION_ACTIVATE : Module::OPERATION_DEACTIVATE;
 
