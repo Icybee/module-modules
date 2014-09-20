@@ -207,6 +207,7 @@ use Brickrouge\Element;
 use Brickrouge\ListViewColumn;
 
 use Icybee\Modules\Modules\ManageBlock;
+use Icybee\WrappedCheckbox;
 
 /**
  * Representation of the `key` column.
@@ -236,14 +237,12 @@ class KeyColumn extends ListViewColumn
 			$disabled = true;
 		}
 
-		return new Element
-		(
-			Element::TYPE_CHECKBOX, array
-			(
-				'name' => Operation::KEY . '[' . $module_id . ']',
-				'disabled' => $disabled
-			)
-		);
+		return new WrappedCheckbox([
+
+			'name' => Operation::KEY . '[' . $module_id . ']',
+			'disabled' => $disabled
+
+		]);
 	}
 }
 
