@@ -513,7 +513,7 @@ class InstallColumn extends ListViewColumn
 					}
 
 					$html .= <<<EOT
-<div class="alert alert-error alert-block undissmissable">
+<div class="alert alert-error alert-block undismissable">
 	<h4 class="alert-heading">$title</h4>
 	<div class="content">
 		<p>$error</p>
