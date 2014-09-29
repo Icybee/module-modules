@@ -10,7 +10,7 @@ Manages [Icybee](http://icybee.org/) modules.
 
 ## Requirement
 
-The package requires PHP 5.3 or later.
+The package requires PHP 5.4 or later.
 
 
 
@@ -31,7 +31,7 @@ Create a `composer.json` file and run `php composer.phar install` command to ins
 }
 ```
 
-Note: This package is part of the packages required by the CMS [Icybee](http://icybee.org). 
+Note: This package is part of the packages required by the CMS [Icybee](http://icybee.org).
 
 
 
