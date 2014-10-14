@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Modules;
 
+use ICanBoogie\Core;
 use ICanBoogie\Module;
 
 /**
@@ -27,10 +28,8 @@ class Modules extends \ICanBoogie\Module\Modules
 	 */
 	protected function lazy_get_index()
 	{
-		global $core;
-
 		$index = parent::lazy_get_index();
-		$enableds = $core->vars['enabled_modules'];
+		$enableds = Core::get()->vars['enabled_modules'];
 
 		if ($enableds && is_array($enableds))
 		{
