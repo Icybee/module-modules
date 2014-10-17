@@ -12,6 +12,7 @@
 namespace Icybee\Modules\Modules;
 
 use ICanBoogie\I18n;
+use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Operation;
 
 use Brickrouge\A;
@@ -78,7 +79,7 @@ class ManageBlock extends ListView
 
 		foreach ($entries as &$descriptor)
 		{
-			$descriptor['__i18n_title'] = self::resolve_module_title($descriptor[Module::T_ID]);
+			$descriptor['__i18n_title'] = self::resolve_module_title($descriptor[Descriptor::ID]);
 			$descriptor['__i18n_category'] = self::translate_module_category($descriptor);
 		}
 
@@ -173,18 +174,18 @@ EOT;
 		(
 			'module_title.' . strtr($module_id, '.', '_'), array(), array
 			(
-				'default' => isset($core->modules->descriptors[$module_id]) ? $core->modules->descriptors[$module_id][Module::T_TITLE] : $module_id
+				'default' => isset($core->modules->descriptors[$module_id]) ? $core->modules->descriptors[$module_id][Descriptor::TITLE] : $module_id
 			)
 		);
 	}
 
 	static public function translate_module_category(array $descriptor)
 	{
-		$category = $descriptor[Module::T_CATEGORY];
+		$category = $descriptor[Descriptor::CATEGORY];
 
 		if (!$category)
 		{
-			list($category) = explode('.', $descriptor[Module::T_ID]);
+			list($category) = explode('.', $descriptor[Descriptor::ID]);
 		}
 
 		return I18n\t($category, array(), array('scope' => 'module_category', 'default' => ucfirst($category)));
@@ -199,7 +200,7 @@ namespace Icybee\Modules\Modules\ManageBlock;
 
 use ICanBoogie\I18n;
 use ICanBoogie\I18n\FormattedString;
-use ICanBoogie\Module;
+use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Operation;
 
 use Brickrouge\A;
@@ -229,8 +230,8 @@ class KeyColumn extends ListViewColumn
 	{
 		global $core;
 
-		$module_id = $descriptor[Module::T_ID];
-		$disabled = $descriptor[Module::T_REQUIRED];
+		$module_id = $descriptor[Descriptor::ID];
+		$disabled = $descriptor[Descriptor::REQUIRED];
 
 		if ($core->modules->usage($module_id))
 		{
@@ -266,7 +267,7 @@ class TitleColumn extends ListViewColumn
 	{
 		global $core;
 
-		$module_id = $descriptor[Module::T_ID];
+		$module_id = $descriptor[Descriptor::ID];
 		$title = $descriptor['__i18n_title'];
 
 		$html = $core->routes->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
@@ -275,7 +276,7 @@ class TitleColumn extends ListViewColumn
 		(
 			'module_description.' . strtr($module_id, '.', '_'), array(), array
 			(
-				'default' => I18n\t($descriptor[Module::T_DESCRIPTION]) ?: '<em class="light">' . I18n\t('No description') . '</em>'
+				'default' => I18n\t($descriptor[Descriptor::DESCRIPTION]) ?: '<em class="light">' . I18n\t('No description') . '</em>'
 			)
 		);
 
@@ -306,7 +307,7 @@ class VersionColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		$version = $descriptor[Module::T_VERSION];
+		$version = $descriptor[Descriptor::VERSION];
 
 		if (!$version)
 		{
@@ -338,8 +339,8 @@ class DependencyColumn extends ListViewColumn
 		global $core;
 
 		$html = '';
-		$extends = $descriptor[Module::T_EXTENDS];
-		$module_id = $descriptor[Module::T_ID];
+		$extends = $descriptor[Descriptor::INHERITS];
+		$module_id = $descriptor[Descriptor::ID];
 
 		if ($extends)
 		{
@@ -351,7 +352,7 @@ class DependencyColumn extends ListViewColumn
 			$html .= '</div>';
 		}
 
-		$requires = $descriptor[Module::T_REQUIRES];
+		$requires = $descriptor[Descriptor::REQUIRES];
 
 		if ($requires)
 		{
@@ -403,7 +404,7 @@ class InstallColumn extends ListViewColumn
 	{
 		global $core;
 
-		$module_id = $descriptor[Module::T_ID];
+		$module_id = $descriptor[Descriptor::ID];
 
 		try
 		{
@@ -423,9 +424,9 @@ class InstallColumn extends ListViewColumn
 		$extends_errors = new \ICanBoogie\Errors;
 		$n_errors = count($errors);
 
-		while ($descriptor[Module::T_EXTENDS])
+		while ($descriptor[Descriptor::INHERITS])
 		{
-			$extends = $descriptor[Module::T_EXTENDS];
+			$extends = $descriptor[Descriptor::INHERITS];
 
 			if (empty($core->modules->descriptors[$extends]))
 			{
@@ -558,7 +559,7 @@ class ConfigureColumn extends ListViewColumn
 	{
 		global $core;
 
-		$module_id = $descriptor[Module::T_ID];
+		$module_id = $descriptor[Descriptor::ID];
 
 		if (empty($core->routes["admin:$module_id/config"]))
 		{

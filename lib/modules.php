@@ -12,7 +12,7 @@
 namespace Icybee\Modules\Modules;
 
 use ICanBoogie\Core;
-use ICanBoogie\Module;
+use ICanBoogie\Module\Descriptor;
 
 /**
  * Accessor class for the modules of the framework.
@@ -37,7 +37,7 @@ class Modules extends \ICanBoogie\Module\Modules
 
 			foreach ($this->descriptors as $module_id => &$descriptor)
 			{
-				$descriptor[Module::T_DISABLED] = !($descriptor[Module::T_REQUIRED] || isset($enableds[$module_id]));
+				$descriptor[Descriptor::DISABLED] = !($descriptor[Descriptor::REQUIRED] || isset($enableds[$module_id]));
 			}
 		}
 
