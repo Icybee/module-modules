@@ -199,7 +199,6 @@ EOT;
 namespace Icybee\Modules\Modules\ManageBlock;
 
 use ICanBoogie\I18n;
-use ICanBoogie\I18n\FormattedString;
 use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Operation;
 
@@ -500,7 +499,7 @@ class InstallColumn extends ListViewColumn
 				. \ICanBoogie\Routing\contextualize("/admin/modules/{$module}/install")
 				. '">' . I18n\t('Install module') . '</a>';
 
-				$title = new FormattedString('The module %title is not properly installed', array('title' => $module->title));
+				$title = I18n\t('The module %title is not properly installed', [ 'title' => $module->title ]);
 
 				\ICanBoogie\log_error("$title.");
 
