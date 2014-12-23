@@ -22,14 +22,14 @@ class Modules extends \ICanBoogie\Module\Modules
 	/**
 	 * Disables selected modules.
 	 *
-	 * Modules are disabled againts a list of enabled modules. The enabled modules list is made
-	 * from the `enabled_modules` persistant variable and the value of the {@link T_REQUIRED}
+	 * Modules are disabled against a list of enabled modules. The enabled modules list is made
+	 * from the `enabled_modules` persistent variable and the value of the {@link T_REQUIRED}
 	 * tag, which forces some modules to always be enabled.
 	 */
 	protected function lazy_get_index()
 	{
 		$index = parent::lazy_get_index();
-		$enableds = Core::get()->vars['enabled_modules'];
+		$enableds = \ICanBoogie\app()->vars['enabled_modules'];
 
 		if ($enableds && is_array($enableds))
 		{

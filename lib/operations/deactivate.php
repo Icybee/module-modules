@@ -20,12 +20,11 @@ class DeactivateOperation extends \ICanBoogie\Operation
 {
 	protected function get_controls()
 	{
-		return array
-		(
-			self::CONTROL_PERMISSION => Module::PERMISSION_ADMINISTER
-		)
+		return [
 
-		+ parent::get_controls();
+			self::CONTROL_PERMISSION => Module::PERMISSION_ADMINISTER
+
+		] + parent::get_controls();
 	}
 
 	/**
@@ -43,14 +42,12 @@ class DeactivateOperation extends \ICanBoogie\Operation
 
 				if ($n)
 				{
-					$errors[] = $errors->format
-					(
-						'The module %title cannot be disabled, :count modules are using it.', array
-						(
-							'title' => I18n\t($module_id, array(), array('scope' => 'module_title')),
-							':count' => $n
-						)
-					);
+					$errors[] = $errors->format('The module %title cannot be disabled, :count modules are using it.', [
+
+						'title' => I18n\t($module_id, [], [ 'scope' => 'module_title' ]),
+						':count' => $n
+
+					]);
 				}
 			}
 		}

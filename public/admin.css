@@ -38,3 +38,9 @@
 .listview .cell--install .not-applicable {
 	font-size: .8571em;
 }
+
+.block--modules--inactives .alert-block {
+	text-align: center;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}

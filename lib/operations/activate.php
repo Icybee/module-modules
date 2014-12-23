@@ -18,12 +18,11 @@ class ActivateOperation extends \ICanBoogie\Operation
 {
 	protected function get_controls()
 	{
-		return array
-		(
-			self::CONTROL_PERMISSION => Module::PERMISSION_ADMINISTER
-		)
+		return [
 
-		+ parent::get_controls();
+			self::CONTROL_PERMISSION => Module::PERMISSION_ADMINISTER
+
+		] + parent::get_controls();
 	}
 
 	protected function validate(\ICanBoogie\Errors $errors)
@@ -44,7 +43,7 @@ class ActivateOperation extends \ICanBoogie\Operation
 				{
 					$module->install($errors);
 
-					\ICanBoogie\log_success('The module %title was installed.', array('title' => $module->title));
+					\ICanBoogie\log_success('The module %title was installed.', [ 'title' => $module->title ]);
 				}
 
 				$enabled[$key] = true;

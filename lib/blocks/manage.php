@@ -35,7 +35,7 @@ class ManageBlock extends ListView
 
 	protected $module;
 
-	public function __construct(Module $module, array $attributes=array())
+	public function __construct(Module $module, array $attributes=[])
 	{
 		$app = $this->app;
 
@@ -43,27 +43,25 @@ class ManageBlock extends ListView
 
 		if (!$app->user->has_permission(Module::PERMISSION_ADMINISTER, $module))
 		{
-			throw new HTTPException("You don't have permission to administer modules.", array(), 403);
+			throw new HTTPException("You don't have permission to administer modules.", [], 403);
 		}
 
-		parent::__construct
-		(
-			$attributes + array
-			(
-				self::ENTRIES => array_values($app->modules->enabled_modules_descriptors),
-				self::COLUMNS => array
-				(
-					'key' =>        __CLASS__ . '\KeyColumn',
-					'title' =>      __CLASS__ . '\TitleColumn',
-					'version' =>    __CLASS__ . '\VersionColumn',
-					'dependency' => __CLASS__ . '\DependencyColumn',
-					'install' =>    __CLASS__ . '\InstallColumn',
-					'configure' =>  __CLASS__ . '\ConfigureColumn'
-				),
+		parent::__construct($attributes + [
 
-				'class' => 'form-primary'
-			)
-		);
+			self::ENTRIES => array_values($app->modules->enabled_modules_descriptors),
+			self::COLUMNS => [
+
+				'key' =>        __CLASS__ . '\KeyColumn',
+				'title' =>      __CLASS__ . '\TitleColumn',
+				'version' =>    __CLASS__ . '\VersionColumn',
+				'dependency' => __CLASS__ . '\DependencyColumn',
+				'install' =>    __CLASS__ . '\InstallColumn',
+				'configure' =>  __CLASS__ . '\ConfigureColumn'
+
+			],
+
+			'class' => 'form-primary'
+		]);
 
 		$this->attach_buttons();
 	}
@@ -98,7 +96,7 @@ class ManageBlock extends ListView
 	{
 		$rendered_rows = parent::render_rows($rows);
 		$entries = $this->entries;
-		$grouped = array();
+		$grouped = [];
 
 		foreach ($rendered_rows as $i => $row)
 		{
@@ -108,8 +106,8 @@ class ManageBlock extends ListView
 
 		uksort($grouped, 'ICanBoogie\unaccent_compare_ci');
 
-		$span = count($rendered_rows) - 2;
-		$rendered_rows = array();
+		$span = count($this->columns) - 2;
+		$rendered_rows = [];
 
 		foreach ($grouped as $group_title => $rows)
 		{
@@ -151,15 +149,12 @@ EOT;
 	{
 		$this->app->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
 
-			$event->buttons[] = new Button
-			(
-				'Disable selected modules', array
-				(
-					'class' => 'btn-primary btn-danger',
-					'type' => 'submit',
-					'data-target' => '.form-primary'
-				)
-			);
+			$event->buttons[] = new Button('Disable selected modules', [
+
+				'class' => 'btn-primary btn-danger',
+				'type' => 'submit',
+				'data-target' => '.form-primary'
+			]);
 
 		});
 	}
@@ -168,13 +163,11 @@ EOT;
 	{
 		$app = \ICanBoogie\app();
 
-		return I18n\t
-		(
-			'module_title.' . strtr($module_id, '.', '_'), array(), array
-			(
-				'default' => isset($app->modules->descriptors[$module_id]) ? $app->modules->descriptors[$module_id][Descriptor::TITLE] : $module_id
-			)
-		);
+		return I18n\t('module_title.' . strtr($module_id, '.', '_'),  [], [
+
+			'default' => isset($app->modules->descriptors[$module_id]) ? $app->modules->descriptors[$module_id][Descriptor::TITLE] : $module_id
+
+		]);
 	}
 
 	static public function translate_module_category(array $descriptor)
@@ -186,7 +179,7 @@ EOT;
 			list($category) = explode('.', $descriptor[Descriptor::ID]);
 		}
 
-		return I18n\t($category, array(), array('scope' => 'module_category', 'default' => ucfirst($category)));
+		return I18n\t($category, [], [ 'scope' => 'module_category', 'default' => ucfirst($category) ]);
 	}
 }
 
@@ -204,6 +197,7 @@ use Brickrouge\A;
 use Brickrouge\Element;
 use Brickrouge\ListViewColumn;
 
+use ICanBoogie\Routing\RouteNotDefined;
 use Icybee\Modules\Modules\ManageBlock;
 use Icybee\WrappedCheckbox;
 
@@ -212,15 +206,13 @@ use Icybee\WrappedCheckbox;
  */
 class KeyColumn extends ListViewColumn
 {
-	public function __construct(ManageBlock $listview, $id, array $options=array())
+	public function __construct(ManageBlock $listview, $id, array $options=[])
 	{
-		parent::__construct
-		(
-			$listview, $id, $options + array
-			(
-				'title' => null
-			)
-		);
+		parent::__construct($listview, $id, $options + [
+
+			'title' => null
+
+		]);
 	}
 
 	public function render_cell($descriptor)
@@ -247,15 +239,13 @@ class KeyColumn extends ListViewColumn
  */
 class TitleColumn extends ListViewColumn
 {
-	public function __construct(ManageBlock $listview, $id, array $options=array())
+	public function __construct(ManageBlock $listview, $id, array $options=[])
 	{
-		parent::__construct
-		(
-			$listview, $id, $options + array
-			(
-				'title' => 'Module'
-			)
-		);
+		parent::__construct($listview, $id, $options + [
+
+			'title' => 'Module'
+
+		]);
 	}
 
 	public function render_cell($descriptor)
@@ -265,13 +255,11 @@ class TitleColumn extends ListViewColumn
 
 		$html = \ICanBoogie\app()->routes->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
 
-		$description = I18n\t
-		(
-			'module_description.' . strtr($module_id, '.', '_'), array(), array
-			(
-				'default' => I18n\t($descriptor[Descriptor::DESCRIPTION]) ?: '<em class="light">' . I18n\t('No description') . '</em>'
-			)
-		);
+		$description = I18n\t('module_description.' . strtr($module_id, '.', '_'),  [], [
+
+			'default' => I18n\t($descriptor[Descriptor::DESCRIPTION]) ?: '<em class="light">' . I18n\t('No description') . '</em>'
+
+		]);
 
 		if ($description)
 		{
@@ -287,15 +275,13 @@ class TitleColumn extends ListViewColumn
  */
 class VersionColumn extends ListViewColumn
 {
-	public function __construct(ManageBlock $listview, $id, array $options=array())
+	public function __construct(ManageBlock $listview, $id, array $options=[])
 	{
-		parent::__construct
-		(
-			$listview, $id, $options + array
-			(
-				'title' => 'Version'
-			)
-		);
+		parent::__construct($listview, $id, $options + [
+
+			'title' => 'Version'
+
+		]);
 	}
 
 	public function render_cell($descriptor)
@@ -316,15 +302,13 @@ class VersionColumn extends ListViewColumn
  */
 class DependencyColumn extends ListViewColumn
 {
-	public function __construct(ManageBlock $listview, $id, array $options=array())
+	public function __construct(ManageBlock $listview, $id, array $options=[])
 	{
-		parent::__construct
-		(
-			$listview, $id, $options + array
-			(
-				'title' => 'Dependency'
-			)
-		);
+		parent::__construct($listview, $id, $options + [
+
+			'title' => 'Dependency'
+
+		]);
 	}
 
 	public function render_cell($descriptor)
@@ -369,7 +353,7 @@ EOT;
 
 		if ($usage)
 		{
-			$html .= '<div class="usage light">' . I18n\t('Used by :count modules', array(':count' => $usage)) . '</div>';
+			$html .= '<div class="usage light">' . I18n\t('Used by :count modules', [ ':count' => $usage ]) . '</div>';
 		}
 
 		return $html;
@@ -381,15 +365,13 @@ EOT;
  */
 class InstallColumn extends ListViewColumn
 {
-	public function __construct(ManageBlock $listview, $id, array $options=array())
+	public function __construct(ManageBlock $listview, $id, array $options=[])
 	{
-		parent::__construct
-		(
-			$listview, $id, $options + array
-			(
-				'title' => 'Installed'
-			)
-		);
+		parent::__construct($listview, $id, $options + [
+
+			'title' => 'Installed'
+
+		]);
 	}
 
 	public function render_cell($descriptor)
@@ -421,13 +403,13 @@ class InstallColumn extends ListViewColumn
 
 			if (empty($app->modules->descriptors[$extends]))
 			{
-				$errors[$module_id] = I18n\t('Requires the %module module which is missing.', array('%module' => $extends));
+				$errors[$module_id] = $errors->format('Requires the %module module which is missing.', [ '%module' => $extends ]);
 
 				break;
 			}
 			else if (!isset($app->modules[$extends]))
 			{
-				$errors[$module_id] = I18n\t('Requires the %module module which is disabled.', array('%module' => $extends));
+				$errors[$module_id] = $errors->format('Requires the %module module which is disabled.', [ '%module' => $extends ]);
 
 				break;
 			}
@@ -444,7 +426,7 @@ class InstallColumn extends ListViewColumn
 
 				if (!$extends_is_installed)
 				{
-					$errors[$module_id] = I18n\t('Requires the %module module which is disabled.', array('%module' => $extends));
+					$errors[$module_id] = $errors->format('Requires the %module module which is disabled.', [ '%module' => $extends ]);
 
 					break;
 				}
@@ -471,14 +453,12 @@ class InstallColumn extends ListViewColumn
 			}
 			catch (\Exception $e)
 			{
-				$errors[$module->id] = I18n\t
-				(
-					'Exception with module %module: :message', array
-					(
-						'%module' => (string) $module,
-						':message' => $e->getMessage()
-					)
-				);
+				$errors[$module->id] = $errors->format('Exception with module %module: :message', [
+
+					'%module' => (string) $module,
+					':message' => $e->getMessage()
+
+				]);
 			}
 
 			if ($is_installed)
@@ -535,29 +515,32 @@ EOT;
  */
 class ConfigureColumn extends ListViewColumn
 {
-	public function __construct(ManageBlock $listview, $id, array $options=array())
+	private $routes;
+
+	public function __construct(ManageBlock $listview, $id, array $options=[])
 	{
-		parent::__construct
-		(
-			$listview, $id, $options + array
-			(
-				'title' => null
-			)
-		);
+		$this->routes = \ICanBoogie\app()->routes;
+
+		parent::__construct($listview, $id, $options + [
+
+			'title' => null
+
+		]);
 	}
 
 	public function render_cell($descriptor)
 	{
-		$app = \ICanBoogie\app();
 		$module_id = $descriptor[Descriptor::ID];
 
-		if (empty($app->routes["admin:$module_id/config"]))
+		try
+		{
+			$route = $this->routes["admin:$module_id/config"];
+
+			return new A('Configure', $route->url);
+		}
+		catch (RouteNotDefined $e)
 		{
 			return;
 		}
-
-		$route = $app->routes["admin:$module_id/config"];
-
-		return new A('Configure', \ICanBoogie\Routing\contextualize($route->pattern));
 	}
 }
