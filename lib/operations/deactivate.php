@@ -33,13 +33,13 @@ class DeactivateOperation extends \ICanBoogie\Operation
 	 */
 	protected function validate(\ICanboogie\Errors $errors)
 	{
-		global $core;
+		$app = $this->app;
 
 		if ($this->key)
 		{
 			foreach (array_keys($this->key) as $module_id)
 			{
-				$n = $core->modules->usage($module_id);
+				$n = $app->modules->usage($module_id);
 
 				if ($n)
 				{
@@ -60,9 +60,9 @@ class DeactivateOperation extends \ICanBoogie\Operation
 
 	protected function process()
 	{
-		global $core;
+		$app = $this->app;
 
-		$enabled = array_keys($core->modules->enabled_modules_descriptors);
+		$enabled = array_keys($app->modules->enabled_modules_descriptors);
 		$enabled = array_combine($enabled, $enabled);
 
 		if ($this->key)
@@ -70,11 +70,11 @@ class DeactivateOperation extends \ICanBoogie\Operation
 			foreach (array_keys($this->key) as $key)
 			{
 				unset($enabled[$key]);
-				unset($core->modules[$key]);
+				unset($app->modules[$key]);
 			}
 		}
 
-		$core->vars['enabled_modules'] = array_values($enabled);
+		$app->vars['enabled_modules'] = array_values($enabled);
 
 		$this->response->location = \ICanBoogie\Routing\contextualize('/admin/' . $this->module->id);
 

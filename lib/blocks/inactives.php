@@ -22,13 +22,11 @@ class InactivesBlock extends ManageBlock
 {
 	public function __construct(Module $module, array $attributes=array())
 	{
-		global $core;
-
 		parent::__construct
 		(
 			$module, $attributes + array
 			(
-				self::ENTRIES => $core->modules->disabled_modules_descriptors,
+				self::ENTRIES => $this->app->modules->disabled_modules_descriptors,
 				self::COLUMNS => array
 				(
 					'key' =>        __NAMESPACE__ . '\ManageBlock\KeyColumn',
@@ -42,9 +40,7 @@ class InactivesBlock extends ManageBlock
 
 	protected function attach_buttons()
 	{
-		global $core;
-
-		$core->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
+		$this->app->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
 
 			$event->buttons[] = new Button
 			(

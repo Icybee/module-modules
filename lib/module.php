@@ -20,20 +20,20 @@ class Module extends \Icybee\Module
 
 	protected function block_install($module_id)
 	{
-		global $core;
+		$app = $this->app;
 
-		if (!$core->user->has_permission(self::PERMISSION_ADMINISTER, $this))
+		if (!$app->user->has_permission(self::PERMISSION_ADMINISTER, $this))
 		{
 			return '<div class="alert alert-error">' . I18n\t('You don\'t have enought privileges to install packages.') . '</div>';
 		}
 
-		if (empty($core->modules[$module_id]))
+		if (empty($app->modules[$module_id]))
 		{
 			return '<div class="alert alert-error">' . I18n\t('The module %module_id does not exists.', array('%module_id' => $module_id)) . '</div>';
 		}
 
 		$errors = new \ICanBoogie\Errors;
-		$module = $core->modules[$module_id];
+		$module = $app->modules[$module_id];
 
 		$is_installed = $module->is_installed($errors);
 
@@ -50,6 +50,6 @@ class Module extends \Icybee\Module
 			return '<div class="alert alert-error">' . I18n\t('Unable to install the module %module', array('%module' => $module_id)) . '</div>';
 		}
 
-		return '<div class="alert alert-success">' . I18n\t('The module %module has been installed. <a href="' . $core->site->path . '/admin/' . $this . '">Retourner à la liste.</a>', array('%module' => $module_id)) . '</div>';
+		return '<div class="alert alert-success">' . I18n\t('The module %module has been installed. <a href="' . $app->site->path . '/admin/' . $this . '">Retourner à la liste.</a>', array('%module' => $module_id)) . '</div>';
 	}
 }

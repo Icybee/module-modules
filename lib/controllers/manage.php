@@ -21,11 +21,11 @@ class ManageController extends \Icybee\BlockController
 {
 	public function __invoke(Request $request)
 	{
-		global $core;
+		$app = $this->app;
 
-		if ($core->has_property('cache'))
+		if ($app->has_property('cache'))
 		{
-			$core->cache['core.modules']->clear();
+			$app->cache['core.modules']->clear();
 		}
 
 		return parent::__invoke($request);

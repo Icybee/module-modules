@@ -28,16 +28,15 @@ class ActivateOperation extends \ICanBoogie\Operation
 
 	protected function validate(\ICanBoogie\Errors $errors)
 	{
-		global $core;
-
+		$app = $this->app;
 		$install_errors = new \ICanBoogie\Errors;
 
 		foreach ((array) $this->key as $key => $dummy)
 		{
 			try
 			{
-				$core->modules[$key] = true;
-				$module = $core->modules[$key];
+				$app->modules[$key] = true;
+				$module = $app->modules[$key];
 				$install_errors->clear();
 				$rc = $module->is_installed($install_errors);
 
@@ -52,7 +51,7 @@ class ActivateOperation extends \ICanBoogie\Operation
 			}
 			catch (\Exception $e)
 			{
-				$core->modules[$key] = false;
+				$app->modules[$key] = false;
 				$errors[] = $e->getMessage();
 			}
 		}
@@ -62,9 +61,9 @@ class ActivateOperation extends \ICanBoogie\Operation
 
 	protected function process()
 	{
-		global $core;
+		$app = $this->app;
 
-		$enabled = array_keys($core->modules->enabled_modules_descriptors);
+		$enabled = array_keys($app->modules->enabled_modules_descriptors);
 		$enabled = array_flip($enabled);
 
 		foreach ((array) $this->key as $key => $dummy)
@@ -72,7 +71,7 @@ class ActivateOperation extends \ICanBoogie\Operation
 			$enabled[$key] = true;
 		}
 
-		$core->vars['enabled_modules'] = array_keys($enabled);
+		$app->vars['enabled_modules'] = array_keys($enabled);
 
 		$this->response->location = \ICanBoogie\Routing\contextualize('/admin/' . (string) $this->module);
 

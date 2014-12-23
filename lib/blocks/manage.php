@@ -37,11 +37,11 @@ class ManageBlock extends ListView
 
 	public function __construct(Module $module, array $attributes=array())
 	{
-		global $core;
+		$app = $this->app;
 
 		$this->module = $module;
 
-		if (!$core->user->has_permission(Module::PERMISSION_ADMINISTER, $module))
+		if (!$app->user->has_permission(Module::PERMISSION_ADMINISTER, $module))
 		{
 			throw new HTTPException("You don't have permission to administer modules.", array(), 403);
 		}
@@ -50,7 +50,7 @@ class ManageBlock extends ListView
 		(
 			$attributes + array
 			(
-				self::ENTRIES => array_values($core->modules->enabled_modules_descriptors),
+				self::ENTRIES => array_values($app->modules->enabled_modules_descriptors),
 				self::COLUMNS => array
 				(
 					'key' =>        __CLASS__ . '\KeyColumn',
@@ -149,9 +149,7 @@ EOT;
 
 	protected function attach_buttons()
 	{
-		global $core;
-
-		$core->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
+		$this->app->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
 
 			$event->buttons[] = new Button
 			(
@@ -168,13 +166,13 @@ EOT;
 
 	static public function resolve_module_title($module_id)
 	{
-		global $core;
+		$app = \ICanBoogie\app();
 
 		return I18n\t
 		(
 			'module_title.' . strtr($module_id, '.', '_'), array(), array
 			(
-				'default' => isset($core->modules->descriptors[$module_id]) ? $core->modules->descriptors[$module_id][Descriptor::TITLE] : $module_id
+				'default' => isset($app->modules->descriptors[$module_id]) ? $app->modules->descriptors[$module_id][Descriptor::TITLE] : $module_id
 			)
 		);
 	}
@@ -227,12 +225,10 @@ class KeyColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		global $core;
-
 		$module_id = $descriptor[Descriptor::ID];
 		$disabled = $descriptor[Descriptor::REQUIRED];
 
-		if ($core->modules->usage($module_id))
+		if (\ICanBoogie\app()->modules->usage($module_id))
 		{
 			$disabled = true;
 		}
@@ -264,12 +260,10 @@ class TitleColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		global $core;
-
 		$module_id = $descriptor[Descriptor::ID];
 		$title = $descriptor['__i18n_title'];
 
-		$html = $core->routes->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
+		$html = \ICanBoogie\app()->routes->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
 
 		$description = I18n\t
 		(
@@ -335,16 +329,15 @@ class DependencyColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		global $core;
-
 		$html = '';
 		$extends = $descriptor[Descriptor::INHERITS];
 		$module_id = $descriptor[Descriptor::ID];
+		$app = \ICanBoogie\app();
 
 		if ($extends)
 		{
 			$label = ManageBlock::resolve_module_title($extends);
-			$class = isset($core->modules[$extends]) ? 'success' : 'warning';
+			$class = isset($app->modules[$extends]) ? 'success' : 'warning';
 
 			$html .= '<div class="extends">Extends: ';
 			$html .= '<span class="label label-' . $class . '">' . $label . '</span>';
@@ -360,7 +353,7 @@ class DependencyColumn extends ListViewColumn
 			foreach ($requires as $require_id => $version)
 			{
 				$label = ManageBlock::resolve_module_title($require_id);
-				$label_class = isset($core->modules[$require_id]) ? 'success' : 'warning';
+				$label_class = isset($app->modules[$require_id]) ? 'success' : 'warning';
 
 				$html .= <<<EOT
 <span class="label label-{$label_class}" title="Version $version">$label</span>
@@ -372,7 +365,7 @@ EOT;
 			$html .= '</div>';
 		}
 
-		$usage = $core->modules->usage($module_id);
+		$usage = $app->modules->usage($module_id);
 
 		if ($usage)
 		{
@@ -401,13 +394,12 @@ class InstallColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		global $core;
-
+		$app = \ICanBoogie\app();
 		$module_id = $descriptor[Descriptor::ID];
 
 		try
 		{
-			$module = $core->modules[$module_id];
+			$module = $app->modules[$module_id];
 		}
 		catch (\Exception $e)
 		{
@@ -427,13 +419,13 @@ class InstallColumn extends ListViewColumn
 		{
 			$extends = $descriptor[Descriptor::INHERITS];
 
-			if (empty($core->modules->descriptors[$extends]))
+			if (empty($app->modules->descriptors[$extends]))
 			{
 				$errors[$module_id] = I18n\t('Requires the %module module which is missing.', array('%module' => $extends));
 
 				break;
 			}
-			else if (!isset($core->modules[$extends]))
+			else if (!isset($app->modules[$extends]))
 			{
 				$errors[$module_id] = I18n\t('Requires the %module module which is disabled.', array('%module' => $extends));
 
@@ -442,7 +434,7 @@ class InstallColumn extends ListViewColumn
 			else
 			{
 				$extends_errors->clear();
-				$extends_module = $core->modules[$extends];
+				$extends_module = $app->modules[$extends];
 				$extends_is_installed = $extends_module->is_installed($extends_errors);
 
 				if (count($extends_errors))
@@ -458,7 +450,7 @@ class InstallColumn extends ListViewColumn
 				}
 			}
 
-			$descriptor = $core->modules->descriptors[$extends];
+			$descriptor = $app->modules->descriptors[$extends];
 		}
 
 		if ($n_errors != count($errors))
@@ -556,16 +548,15 @@ class ConfigureColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		global $core;
-
+		$app = \ICanBoogie\app();
 		$module_id = $descriptor[Descriptor::ID];
 
-		if (empty($core->routes["admin:$module_id/config"]))
+		if (empty($app->routes["admin:$module_id/config"]))
 		{
 			return;
 		}
 
-		$route = $core->routes["admin:$module_id/config"];
+		$route = $app->routes["admin:$module_id/config"];
 
 		return new A('Configure', \ICanBoogie\Routing\contextualize($route->pattern));
 	}

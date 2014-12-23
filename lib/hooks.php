@@ -18,10 +18,10 @@ class Hooks
 	/**
 	 * Override the method to provide our own accessor.
 	 */
-	static public function get_modules(Core $core)
+	static public function get_modules(Core $app)
 	{
-		$config = $core->config;
+		$config = $app->config;
 
-		return new Modules($config['module-path'], $config['cache modules'] ? $core->vars : null);
+		return new Modules($config['module-path'], $config['cache modules'] ? $app->vars : null);
 	}
 }
