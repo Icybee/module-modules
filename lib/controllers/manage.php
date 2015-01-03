@@ -19,7 +19,7 @@ use ICanBoogie\HTTP\Request;
  */
 class ManageController extends \Icybee\BlockController
 {
-	public function __invoke(Request $request)
+	protected function respond(Request $request)
 	{
 		$app = $this->app;
 
@@ -28,6 +28,6 @@ class ManageController extends \Icybee\BlockController
 			$app->cache['core.modules']->clear();
 		}
 
-		return parent::__invoke($request);
+		return parent::respond($request);
 	}
 }
