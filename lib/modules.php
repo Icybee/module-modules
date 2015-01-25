@@ -17,7 +17,7 @@ use ICanBoogie\Module\Descriptor;
 /**
  * Accessor class for the modules of the framework.
  */
-class Modules extends \ICanBoogie\Module\Modules
+class Modules extends \ICanBoogie\Module\ModuleCollection
 {
 	/**
 	 * Disables selected modules.
