@@ -189,6 +189,7 @@ EOT;
 
 namespace Icybee\Modules\Modules\ManageBlock;
 
+use Brickrouge\Alert;
 use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Operation;
@@ -437,7 +438,11 @@ class InstallColumn extends ListViewColumn
 
 		if ($n_errors != count($errors))
 		{
-			$html .= '<div class="alert alert-error">' . implode('<br />', (array) $errors[$module_id]) . '</div>';
+			$html .= new Alert($errors[$module_id], [
+
+				Alert::UNDISMISSABLE => true
+
+			]);
 		}
 		else
 		{
@@ -481,7 +486,11 @@ class InstallColumn extends ListViewColumn
 
 					if (is_array($error))
 					{
-						$error = implode('</p><p>', $error);
+						$error = '– ' . implode('</p><p>– ', $error);
+					}
+					else
+					{
+						$error = '– ' . $error;
 					}
 
 					$html .= <<<EOT
