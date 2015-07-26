@@ -2,7 +2,7 @@
 
 namespace Icybee\Modules\Modules;
 
-$hooks = __NAMESPACE__ . '\Hooks::';
+$hooks = Hooks::class . '::';
 
 return [
 

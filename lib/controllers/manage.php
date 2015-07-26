@@ -17,7 +17,7 @@ use ICanBoogie\HTTP\Request;
  * The controller flushes the `core.modules` when it is invoked so that the module list rendered
  * is always up-to-date with what is actually on disk.
  */
-class ManageController extends \Icybee\BlockController
+class ManageController extends \Icybee\Controller\BlockController
 {
 	protected function respond(Request $request)
 	{

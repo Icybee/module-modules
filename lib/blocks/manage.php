@@ -287,7 +287,7 @@ class VersionColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		$version = $descriptor[Descriptor::VERSION];
+		$version = 'N/A';
 
 		if (!$version)
 		{

@@ -7,10 +7,9 @@ use ICanBoogie\Module\Descriptor;
 return array
 (
 	Descriptor::CATEGORY => 'features',
-	Descriptor::DESCRIPTION => 'Manages modules.',
+	Descriptor::DESCRIPTION => "Manages modules",
 	Descriptor::NS => __NAMESPACE__,
 	Descriptor::PERMISSION => false,
 	Descriptor::REQUIRED => true,
-	Descriptor::TITLE => 'Modules',
-	Descriptor::VERSION => '1.0'
+	Descriptor::TITLE => "Modules"
 );
