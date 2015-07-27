@@ -17,27 +17,27 @@ use ICanBoogie\Module\Descriptor;
 /**
  * Accessor class for the modules of the framework.
  */
-class Modules extends \ICanBoogie\Module\ModuleCollection
+class ModuleCollection extends \ICanBoogie\Module\ModuleCollection
 {
 	/**
 	 * Disables selected modules.
 	 *
 	 * Modules are disabled against a list of enabled modules. The enabled modules list is made
-	 * from the `enabled_modules` persistent variable and the value of the {@link T_REQUIRED}
-	 * tag, which forces some modules to always be enabled.
+	 * from the `enabled_modules` persistent variable and the value of the
+	 * {@link Descriptor::REQUIRED} tag, which forces some modules to always be enabled.
 	 */
 	protected function lazy_get_index()
 	{
 		$index = parent::lazy_get_index();
-		$enableds = \ICanBoogie\app()->vars['enabled_modules'];
+		$enabled = \ICanBoogie\app()->vars['enabled_modules'];
 
-		if ($enableds && is_array($enableds))
+		if ($enabled && is_array($enabled))
 		{
-			$enableds = array_flip($enableds);
+			$enabled = array_flip($enabled);
 
 			foreach ($this->descriptors as $module_id => &$descriptor)
 			{
-				$descriptor[Descriptor::DISABLED] = !($descriptor[Descriptor::REQUIRED] || isset($enableds[$module_id]));
+				$descriptor[Descriptor::DISABLED] = !($descriptor[Descriptor::REQUIRED] || isset($enabled[$module_id]));
 			}
 		}
 

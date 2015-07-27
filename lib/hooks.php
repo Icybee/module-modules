@@ -17,11 +17,15 @@ class Hooks
 {
 	/**
 	 * Override the method to provide our own accessor.
+	 *
+	 * @param Core $app
+	 *
+	 * @return ModuleCollection
 	 */
 	static public function get_modules(Core $app)
 	{
 		$config = $app->config;
 
-		return new Modules($config['module-path'], $config['cache modules'] ? $app->vars : null);
+		return new ModuleCollection($config['module-path'], $config['cache modules'] ? $app->vars : null);
 	}
 }

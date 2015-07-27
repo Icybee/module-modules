@@ -19,7 +19,7 @@ use ICanBoogie\HTTP\Request;
  */
 class ManageController extends \Icybee\Controller\BlockController
 {
-	protected function respond(Request $request)
+	protected function action(Request $request)
 	{
 		$app = $this->app;
 

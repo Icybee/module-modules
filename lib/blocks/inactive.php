@@ -17,8 +17,10 @@ use Brickrouge\Alert;
 use Brickrouge\Button;
 
 use Icybee\Element\ActionbarToolbar;
+use Icybee\Modules\Editor\Collection;
+use Icybee\Modules\Modules\Element\ListView as Columns;
 
-class InactivesBlock extends ManageBlock
+class InactiveBlock extends ManageBlock
 {
 	public function __construct(Module $module, array $attributes=[])
 	{
@@ -27,10 +29,10 @@ class InactivesBlock extends ManageBlock
 			self::ENTRIES => $this->app->modules->disabled_modules_descriptors,
 			self::COLUMNS => [
 
-				'key' =>        __NAMESPACE__ . '\ManageBlock\KeyColumn',
-				'title' =>      __NAMESPACE__ . '\ManageBlock\TitleColumn',
-				'version' =>    __NAMESPACE__ . '\ManageBlock\VersionColumn',
-				'dependency' => __NAMESPACE__ . '\ManageBlock\DependencyColumn'
+				'key' =>        Columns\KeyColumn::class,
+				'title' =>      Columns\TitleColumn::class,
+				'version' =>    Columns\VersionColumn::class,
+				'dependency' => Columns\DependencyColumn::class
 
 			]
 		]);

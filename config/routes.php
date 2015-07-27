@@ -5,7 +5,7 @@ namespace Icybee\Modules\Modules;
 use ICanBoogie\HTTP\Request;
 use Icybee\Routing\RouteMaker as Make;
 
-return Make::admin('modules', ManageController::class, [
+return Make::admin('modules', Routing\ModulesAdminController::class, [
 
 	'only' => [ 'index', 'inactive', 'install' ],
 	'actions' => [
