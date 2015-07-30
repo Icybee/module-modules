@@ -11,14 +11,13 @@
 
 namespace Icybee\Modules\Modules;
 
+use ICanBoogie\HTTP\PermissionRequired;
 use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Operation;
 
 use Brickrouge\Button;
 use Brickrouge\ListView;
-
-use ICanBoogie\PermissionRequired;
 
 use Icybee\Element\ActionbarToolbar;
 use Icybee\Modules\Modules\Element\ListView as Columns;
@@ -55,7 +54,6 @@ class ManageBlock extends ListView
 
 				'key' =>        Columns\KeyColumn::class,
 				'title' =>      Columns\TitleColumn::class,
-				'version' =>    Columns\VersionColumn::class,
 				'dependency' => Columns\DependencyColumn::class,
 				'install' =>    Columns\InstallColumn::class,
 				'configure' =>  Columns\ConfigureColumn::class

@@ -44,3 +44,25 @@
 	padding-top: 2rem;
 	padding-bottom: 2rem;
 }
+
+.module-relations {
+	margin: 0;
+	display: table;
+}
+
+.module-relations-row {
+	display: table-row;
+}
+
+.module-relations-row > dt,
+.module-relations-row > dd {
+	display: table-cell;
+	padding: 4px;
+}
+
+.module-relations-row > dt {
+	padding-right: 4px;
+	text-align: right;
+	width: 8ex;
+	white-space: nowrap;
+}

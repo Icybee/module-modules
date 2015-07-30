@@ -20,6 +20,8 @@ use Icybee\Modules\Modules\ManageBlock;
 
 /**
  * Representation of the `dependency` column.
+ *
+ * @property \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
  */
 class DependencyColumn extends ListViewColumn
 {
@@ -32,51 +34,127 @@ class DependencyColumn extends ListViewColumn
 		]);
 	}
 
+	/**
+	 * Render module descriptor.
+	 *
+	 * @param array $descriptor
+	 *
+	 * @return string
+	 */
 	public function render_cell($descriptor)
 	{
-		$html = '';
-		$extends = $descriptor[Descriptor::INHERITS];
-		$module_id = $descriptor[Descriptor::ID];
-		$app = \ICanBoogie\app();
+		$body =
 
-		if ($extends)
-		{
-			$label = ManageBlock::resolve_module_title($extends);
-			$class = isset($app->modules[$extends]) ? 'success' : 'warning';
+			$this->render_module_inherits($descriptor) .
+			$this->render_module_requires($descriptor) .
+			$this->render_module_users($descriptor);
 
-			$html .= '<div class="extends">Extends: ';
-			$html .= '<span class="label label-' . $class . '">' . $label . '</span>';
-			$html .= '</div>';
-		}
-
-		$requires = $descriptor[Descriptor::REQUIRES];
-
-		if ($requires)
-		{
-			$html .= '<div class="requires">Requires: ';
-
-			foreach ($requires as $require_id => $version)
-			{
-				$label = ManageBlock::resolve_module_title($require_id);
-				$label_class = isset($app->modules[$require_id]) ? 'success' : 'warning';
-
-				$html .= <<<EOT
-<span class="label label-{$label_class}" title="Version $version">$label</span>
+		return <<<EOT
+<dl class="module-relations">$body</dl>
 EOT;
 
-				$html .= ' ';
-			}
+	}
 
-			$html .= '</div>';
-		}
+	/**
+	 * Renders module inherits.
+	 *
+	 * @param array $descriptor
+	 *
+	 * @return string
+	 */
+	protected function render_module_inherits(array $descriptor)
+	{
+		$inherits = $descriptor[Descriptor::INHERITS];
 
-		$usage = $app->modules->usage($module_id);
-
-		if ($usage)
+		if (!$inherits)
 		{
-			$html .= '<div class="usage light">' . I18n\t('Used by :count modules', [ ':count' => $usage ]) . '</div>';
+			return '';
 		}
 
-		return $html;
+		$label = implode(' ', $this->create_modules_labels([ $inherits ]));
+
+		return <<<EOT
+<div class="module-relations-row module-relations--inherits">
+	<dt>Inherits</dt>
+	<dd>$label</dd>
+</div>
+EOT;
+	}
+
+	/**
+	 * Renders module requires.
+	 *
+	 * @param array $descriptor
+	 *
+	 * @return string
+	 */
+	protected function render_module_requires(array $descriptor)
+	{
+		$requires = $descriptor[Descriptor::REQUIRES];
+
+		if (!$requires)
+		{
+			return '';
+		}
+
+		$labels = implode(' ', $this->create_modules_labels($requires));
+
+		return <<<EOT
+<div class="module-relations-row module-relations--requires">
+	<dt>Requires</dt>
+	<dd>$labels</dd>
+</div>
+EOT;
+	}
+
+	/**
+	 * Renders module users.
+	 *
+	 * @param array $descriptor
+	 *
+	 * @return string
+	 */
+	protected function render_module_users(array $descriptor)
+	{
+		$module_id = $descriptor[Descriptor::ID];
+		$descriptors = $this->app->modules->filter_descriptors_by_users($module_id);
+
+		if (!$descriptors)
+		{
+			return '';
+		}
+
+		$labels = implode(' ', $this->create_modules_labels(array_keys($descriptors)));
+
+		return <<<EOT
+<div class="module-relations-row module-relations--users">
+	<dt>Used by</dt>
+	<dd>$labels</dd>
+</div>
+EOT;
+	}
+
+	/**
+	 * @param array $module_id_collection
+	 *
+	 * @return string
+	 */
+	protected function create_modules_labels(array $module_id_collection)
+	{
+		$labels = [];
+		$modules = $this->app->modules;
+
+		foreach ($module_id_collection as $module_id)
+		{
+			$label = ManageBlock::resolve_module_title($module_id);
+			$label_class = isset($modules[$module_id]) ? 'success' : 'warning';
+
+			$labels[] = <<<EOT
+<span class="label label-{$label_class}">$label</span>
+EOT;
+
+		}
+
+		return $labels;
 	}
 }
