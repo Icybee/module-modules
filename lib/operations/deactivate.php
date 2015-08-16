@@ -11,13 +11,19 @@
 
 namespace Icybee\Modules\Modules;
 
-use ICanBoogie\I18n;
+use ICanBoogie\Errors;
+use ICanBoogie\Operation;
 
 /**
  * Deactivates the specified modules.
+ *
+ * @property-read \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
  */
-class DeactivateOperation extends \ICanBoogie\Operation
+class DeactivateOperation extends Operation
 {
+	/**
+	 * @inheritdoc
+	 */
 	protected function get_controls()
 	{
 		return [
@@ -29,8 +35,10 @@ class DeactivateOperation extends \ICanBoogie\Operation
 
 	/**
 	 * Only modules which are not used by other modules can be disabled.
+	 *
+	 * @inheritdoc
 	 */
-	protected function validate(\ICanboogie\Errors $errors)
+	protected function validate(Errors $errors)
 	{
 		$app = $this->app;
 
@@ -44,7 +52,7 @@ class DeactivateOperation extends \ICanBoogie\Operation
 				{
 					$errors[] = $errors->format('The module %title cannot be disabled, :count modules are using it.', [
 
-						'title' => I18n\t($module_id, [], [ 'scope' => 'module_title' ]),
+						'title' => $this->format($module_id, [], [ 'scope' => 'module_title' ]),
 						':count' => $n
 
 					]);
@@ -55,6 +63,9 @@ class DeactivateOperation extends \ICanBoogie\Operation
 		return $errors;
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	protected function process()
 	{
 		$app = $this->app;
@@ -73,7 +84,7 @@ class DeactivateOperation extends \ICanBoogie\Operation
 
 		$app->vars['enabled_modules'] = array_values($enabled);
 
-		$this->response->location = \ICanBoogie\Routing\contextualize('/admin/' . $this->module->id);
+		$this->response->location = $app->url_for("admin:{$this->module}");
 
 		return true;
 	}

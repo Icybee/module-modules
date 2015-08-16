@@ -133,7 +133,7 @@ EOT;
 		$operation_destination_value = $this->module->id;
 		$operation_name = Operation::NAME;
 		// TODO-20130702: Fix the following hack:
-		$operation_value = ($this instanceof InactivesBlock) ? Module::OPERATION_ACTIVATE : Module::OPERATION_DEACTIVATE;
+		$operation_value = ($this instanceof InactiveBlock) ? Module::OPERATION_ACTIVATE : Module::OPERATION_DEACTIVATE;
 
 		return <<<EOT
 <form action="" method="POST" class="form-primary">
@@ -161,9 +161,9 @@ EOT;
 
 	static public function resolve_module_title($module_id)
 	{
-		$app = \ICanBoogie\app();
+		$app = self::app();
 
-		return I18n\t('module_title.' . strtr($module_id, '.', '_'),  [], [
+		return $app->translate('module_title.' . strtr($module_id, '.', '_'),  [], [
 
 			'default' => isset($app->modules->descriptors[$module_id]) ? $app->modules->descriptors[$module_id][Descriptor::TITLE] : $module_id
 
@@ -179,6 +179,14 @@ EOT;
 			list($category) = explode('.', $descriptor[Descriptor::ID]);
 		}
 
-		return I18n\t($category, [], [ 'scope' => 'module_category', 'default' => ucfirst($category) ]);
+		return self::app()->translate($category, [], [ 'scope' => 'module_category', 'default' => ucfirst($category) ]);
+	}
+
+	/**
+	 * @return \ICanBoogie\Core|\Icybee\Binding\CoreBindings
+	 */
+	static private function app()
+	{
+		return \ICanBoogie\app();
 	}
 }

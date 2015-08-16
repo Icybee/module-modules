@@ -11,10 +11,15 @@
 
 namespace Icybee\Modules\Modules;
 
+use ICanBoogie\Errors;
+use ICanBoogie\Operation;
+
 /**
  * Activates the specified modules.
+ *
+ * @property-read \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
  */
-class ActivateOperation extends \ICanBoogie\Operation
+class ActivateOperation extends Operation
 {
 	protected function get_controls()
 	{
@@ -25,10 +30,10 @@ class ActivateOperation extends \ICanBoogie\Operation
 		] + parent::get_controls();
 	}
 
-	protected function validate(\ICanBoogie\Errors $errors)
+	protected function validate(Errors $errors)
 	{
 		$app = $this->app;
-		$install_errors = new \ICanBoogie\Errors;
+		$install_errors = new Errors;
 
 		foreach ((array) $this->key as $key => $dummy)
 		{
@@ -72,7 +77,7 @@ class ActivateOperation extends \ICanBoogie\Operation
 
 		$app->vars['enabled_modules'] = array_keys($enabled);
 
-		$this->response->location = \ICanBoogie\Routing\contextualize('/admin/' . (string) $this->module);
+		$this->response->location = $app->url_for("admin:{$this->module}");
 
 		return true;
 	}

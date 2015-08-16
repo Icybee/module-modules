@@ -13,10 +13,13 @@ namespace Icybee\Modules\Modules\Routing;
 
 use ICanBoogie\HTTP\Request;
 
+use Icybee\Binding\ObjectBindings;
 use Icybee\Routing\AdminController;
 
 class ModulesAdminController extends AdminController
 {
+	use ObjectBindings;
+
 	/**
 	 * Clears module cache before doing anything.
 	 *

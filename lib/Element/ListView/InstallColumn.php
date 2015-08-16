@@ -126,15 +126,15 @@ class InstallColumn extends ListViewColumn
 
 			if ($is_installed)
 			{
-				$html .= I18n\t('Installed');
+				$html .= $this->t('Installed');
 			}
 			else if ($is_installed === false)
 			{
 				$btn = '<a class="btn btn-danger" href="'
 					. \ICanBoogie\Routing\contextualize("/admin/modules/{$module}/install")
-					. '">' . I18n\t('Install module') . '</a>';
+					. '">' . $this->t('Install module') . '</a>';
 
-				$title = I18n\t('The module %title is not properly installed', [ 'title' => $module->title ]);
+				$title = $this->t('The module %title is not properly installed', [ 'title' => $module->title ]);
 
 				\ICanBoogie\log_error("$title.");
 

@@ -11,15 +11,19 @@
 
 namespace Icybee\Modules\Modules\Element\ListView;
 
+use Brickrouge\A;
 use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 
 use Brickrouge\ListViewColumn;
 
+use ICanBoogie\Routing\RouteNotDefined;
 use Icybee\Modules\Modules\ManageBlock;
 
 /**
  * Representation of the `title` column.
+ *
+ * @property-read \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
  */
 class TitleColumn extends ListViewColumn
 {
@@ -37,11 +41,22 @@ class TitleColumn extends ListViewColumn
 		$module_id = $descriptor[Descriptor::ID];
 		$title = $descriptor['__i18n_title'];
 
-		$html = \ICanBoogie\app()->routes->find('/admin/' . $module_id) ? '<a href="' . \ICanBoogie\Routing\contextualize('/admin/' . $module_id) . '">' . $title . '</a>' : $title;
+		try
+		{
+			$title = new A($title, $this->app->url_for("admin:{$module_id}:index"));
+		}
+		catch (RouteNotDefined $e)
+		{
+			#
+			# If the route is not defined we just display the title and not a link
+			#
+		}
 
-		$description = I18n\t('module_description.' . strtr($module_id, '.', '_'),  [], [
+		$html = $title;
 
-			'default' => I18n\t($descriptor[Descriptor::DESCRIPTION]) ?: '<em class="light">' . I18n\t('No description') . '</em>'
+		$description = $this->t('module_description.' . strtr($module_id, '.', '_'),  [], [
+
+			'default' => $this->t($descriptor[Descriptor::DESCRIPTION]) ?: '<em class="light">' . $this->t('No description') . '</em>'
 
 		]);
 

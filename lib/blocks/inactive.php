@@ -31,7 +31,6 @@ class InactiveBlock extends ManageBlock
 
 				'key' =>        Columns\KeyColumn::class,
 				'title' =>      Columns\TitleColumn::class,
-				'version' =>    Columns\VersionColumn::class,
 				'dependency' => Columns\DependencyColumn::class
 
 			]
