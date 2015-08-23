@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Modules\Element\ListView;
 
+use ICanBoogie\Errors;
 use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 
@@ -35,6 +36,8 @@ class InstallColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
+		/* @var $app \ICanBoogie\Core|\ICanBoogie\Module\CoreBindings */
+
 		$app = \ICanBoogie\app();
 		$module_id = $descriptor[Descriptor::ID];
 
@@ -52,8 +55,8 @@ class InstallColumn extends ListViewColumn
 
 		# EXTENDS
 
-		$errors = new \ICanBoogie\Errors;
-		$extends_errors = new \ICanBoogie\Errors;
+		$errors = new Errors;
+		$extends_errors = new Errors;
 		$n_errors = count($errors);
 
 		while ($descriptor[Descriptor::INHERITS])

@@ -13,11 +13,15 @@ namespace Icybee\Modules\Modules;
 
 use ICanBoogie\HTTP\Request;
 
+use Icybee\Controller\BlockController;
+
 /**
  * The controller flushes the `core.modules` when it is invoked so that the module list rendered
  * is always up-to-date with what is actually on disk.
+ *
+ * @property \ICanBoogie\Core|\Icybee\Modules\Cache\Binding\CoreBindings $app
  */
-class ManageController extends \Icybee\Controller\BlockController
+class ManageController extends BlockController
 {
 	protected function action(Request $request)
 	{
@@ -28,6 +32,6 @@ class ManageController extends \Icybee\Controller\BlockController
 			$app->cache['core.modules']->clear();
 		}
 
-		return parent::respond($request);
+		return parent::action($request);
 	}
 }
