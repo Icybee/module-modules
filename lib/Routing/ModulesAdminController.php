@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Modules\Routing;
 
+use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
 
 use Icybee\Binding\ObjectBindings;
@@ -19,6 +20,7 @@ use Icybee\Routing\AdminController;
 class ModulesAdminController extends AdminController
 {
 	use ObjectBindings;
+	use \ICanBoogie\Module\CoreBindings;
 
 	/**
 	 * Clears module cache before doing anything.
@@ -35,6 +37,18 @@ class ModulesAdminController extends AdminController
 		}
 
 		return parent::action($request);
+	}
+
+	protected function action_install($module_id)
+	{
+		$module = $this->modules[$module_id];
+		$errors = new Errors;
+
+		if (!$module->install($errors)) {
+			throw new \Exception("Unable to install $module_id");
+		}
+
+		return $this->redirect($this->request->referer);
 	}
 
 	/**
