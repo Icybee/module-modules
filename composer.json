@@ -16,13 +16,14 @@
 		"issues": "https://github.com/Icybee/module-modules/issues",
 		"source": "https://github.com/Icybee/module-modules"
 	},
+	"minimum-stability": "dev",
 	"require": {
-		"php": ">=5.4.0",
-	  	"icanboogie/routing": "~2.0",
+		"php": ">=5.5.0",
+	  	"icanboogie/routing": "^2.5.0",
 		"icanboogie/module-installer": "~1.2",
-		"icanboogie/module": "~2.1",
-	  	"icanboogie/i18n": "~2.0",
-	  	"brickrouge/brickrouge": "~2.1"
+		"icanboogie/module": "^3.0.0",
+	  	"icanboogie/i18n": "^2.0.0",
+	  	"brickrouge/brickrouge": "^2.1.0"
 	},
 	"autoload": {
 		"classmap": [ "lib" ]
