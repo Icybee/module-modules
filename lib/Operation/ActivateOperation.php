@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Modules;
+namespace Icybee\Modules\Modules\Operation;
 
 use ICanBoogie\Errors;
 use ICanBoogie\Operation;
+
+use Icybee\Modules\Modules\Module;
 
 /**
  * Activates the specified modules.
