@@ -17,7 +17,7 @@ use ICanBoogie\Routing\RouteNotDefined;
 use Brickrouge\A;
 use Brickrouge\ListViewColumn;
 
-use Icybee\Modules\Modules\ManageBlock;
+use Icybee\Modules\Modules\Block\ManageBlock;
 
 /**
  * Representation of the `configure` column.

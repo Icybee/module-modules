@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Modules;
+namespace Icybee\Modules\Modules\Block;
 
 use ICanBoogie\HTTP\PermissionRequired;
 use ICanBoogie\I18n;
@@ -20,6 +20,7 @@ use Brickrouge\Button;
 use Brickrouge\ListView;
 
 use Icybee\Element\ActionbarToolbar;
+use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
 
 /**
@@ -32,7 +33,7 @@ class ManageBlock extends ListView
 		parent::add_assets($document);
 
 		$document->css->add(\Icybee\ASSETS . 'css/manage.css');
-		$document->css->add(DIR . 'public/admin.css');
+		$document->css->add(\Icybee\Modules\Modules\DIR . 'public/admin.css');
 	}
 
 	protected $module;

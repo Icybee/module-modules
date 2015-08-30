@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Modules;
+namespace Icybee\Modules\Modules\Block;
 
 use ICanBoogie\Operation;
 
@@ -18,6 +18,7 @@ use Brickrouge\Button;
 
 use Icybee\Element\ActionbarToolbar;
 use Icybee\Modules\Editor\Collection;
+use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
 
 class InactiveBlock extends ManageBlock

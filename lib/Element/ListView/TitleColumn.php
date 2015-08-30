@@ -18,7 +18,7 @@ use ICanBoogie\Module\Descriptor;
 use Brickrouge\ListViewColumn;
 
 use ICanBoogie\Routing\RouteNotDefined;
-use Icybee\Modules\Modules\ManageBlock;
+use Icybee\Modules\Modules\Block\ManageBlock;
 
 /**
  * Representation of the `title` column.

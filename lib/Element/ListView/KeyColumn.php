@@ -16,7 +16,7 @@ use ICanBoogie\Operation;
 
 use Brickrouge\ListViewColumn;
 
-use Icybee\Modules\Modules\ManageBlock;
+use Icybee\Modules\Modules\Block\ManageBlock;
 use Icybee\WrappedCheckbox;
 
 /**

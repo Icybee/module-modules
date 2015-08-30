@@ -18,7 +18,7 @@ use ICanBoogie\Module\Descriptor;
 use Brickrouge\Alert;
 use Brickrouge\ListViewColumn;
 
-use Icybee\Modules\Modules\ManageBlock;
+use Icybee\Modules\Modules\Block\ManageBlock;
 
 /**
  * Representation of the `install` column.
