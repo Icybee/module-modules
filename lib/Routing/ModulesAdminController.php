@@ -14,12 +14,12 @@ namespace Icybee\Modules\Modules\Routing;
 use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
 
-use Icybee\Binding\ObjectBindings;
+use Icybee\Binding\PrototypedBindings;
 use Icybee\Routing\AdminController;
 
 class ModulesAdminController extends AdminController
 {
-	use ObjectBindings;
+	use PrototypedBindings;
 	use \ICanBoogie\Module\CoreBindings;
 
 	/**
