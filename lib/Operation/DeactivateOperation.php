@@ -52,7 +52,7 @@ class DeactivateOperation extends Operation
 
 				if ($n)
 				{
-					$errors[] = $errors->format('The module %title cannot be disabled, :count modules are using it.', [
+					$errors->add(null, 'The module %title cannot be disabled, :count modules are using it.', [
 
 						'title' => $this->format($module_id, [], [ 'scope' => 'module_title' ]),
 						':count' => $n

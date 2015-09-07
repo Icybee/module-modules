@@ -65,13 +65,13 @@ class InstallColumn extends ListViewColumn
 
 			if (empty($app->modules->descriptors[$extends]))
 			{
-				$errors[$module_id] = $errors->format('Requires the %module module which is missing.', [ '%module' => $extends ]);
+				$errors->add($module_id, "Requires the %module module which is missing.", [ '%module' => $extends ]);
 
 				break;
 			}
 			else if (!isset($app->modules[$extends]))
 			{
-				$errors[$module_id] = $errors->format('Requires the %module module which is disabled.', [ '%module' => $extends ]);
+				$errors->add($module_id, "Requires the %module module which is disabled.", [ '%module' => $extends ]);
 
 				break;
 			}
@@ -88,7 +88,7 @@ class InstallColumn extends ListViewColumn
 
 				if (!$extends_is_installed)
 				{
-					$errors[$module_id] = $errors->format('Requires the %module module which is disabled.', [ '%module' => $extends ]);
+					$errors->add($module_id, "Requires the %module module which is disabled.", [ '%module' => $extends ]);
 
 					break;
 				}
@@ -119,7 +119,7 @@ class InstallColumn extends ListViewColumn
 			}
 			catch (\Exception $e)
 			{
-				$errors[$module->id] = $errors->format('Exception with module %module: :message', [
+				$errors->add($module->id, 'Exception with module %module: :message', [
 
 					'%module' => (string) $module,
 					':message' => $e->getMessage()
