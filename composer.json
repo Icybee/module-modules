@@ -20,7 +20,7 @@
 	"require": {
 		"php": ">=5.5.0",
 	  	"icanboogie/routing": "^2.5.0",
-		"icanboogie/module-installer": "~1.2",
+		"icanboogie/module-installer": "^1.2.3",
 		"icanboogie/module": "^3.0.0",
 	  	"icanboogie/i18n": "^2.0.0",
 	  	"brickrouge/brickrouge": "^2.1.0"

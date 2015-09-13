@@ -79,7 +79,7 @@ class ActivateOperation extends Operation
 
 		$app->vars['enabled_modules'] = array_keys($enabled);
 
-		$this->response->location = $app->url_for("admin:{$this->module}");
+		$this->response->location = $app->url_for('admin:modules:index');
 
 		return true;
 	}
