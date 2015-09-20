@@ -14,15 +14,16 @@ namespace Icybee\Modules\Modules\Operation;
 use ICanBoogie\Errors;
 use ICanBoogie\Operation;
 
+use Icybee\Binding\Core\PrototypedBindings;
 use Icybee\Modules\Modules\Module;
 
 /**
  * Activates the specified modules.
- *
- * @property-read \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
  */
 class ActivateOperation extends Operation
 {
+	use PrototypedBindings;
+
 	protected function get_controls()
 	{
 		return [

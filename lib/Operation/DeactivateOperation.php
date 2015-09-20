@@ -14,15 +14,16 @@ namespace Icybee\Modules\Modules\Operation;
 use ICanBoogie\Errors;
 use ICanBoogie\Operation;
 
+use Icybee\Binding\Core\PrototypedBindings;
 use Icybee\Modules\Modules\Module;
 
 /**
  * Deactivates the specified modules.
- *
- * @property-read \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
  */
 class DeactivateOperation extends Operation
 {
+	use PrototypedBindings;
+
 	/**
 	 * @inheritdoc
 	 */
@@ -71,8 +72,9 @@ class DeactivateOperation extends Operation
 	protected function process()
 	{
 		$app = $this->app;
+		$modules = $app->modules;
 
-		$enabled = array_keys($app->modules->enabled_modules_descriptors);
+		$enabled = array_keys($modules->enabled_modules_descriptors);
 		$enabled = array_combine($enabled, $enabled);
 
 		if ($this->key)
@@ -80,7 +82,7 @@ class DeactivateOperation extends Operation
 			foreach (array_keys($this->key) as $key)
 			{
 				unset($enabled[$key]);
-				unset($app->modules[$key]);
+				unset($modules[$key]);
 			}
 		}
 
