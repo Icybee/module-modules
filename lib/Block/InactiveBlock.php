@@ -16,7 +16,7 @@ use ICanBoogie\Operation;
 use Brickrouge\Alert;
 use Brickrouge\Button;
 
-use Icybee\Element\ActionbarToolbar;
+use Icybee\Element\ActionBarToolbar;
 use Icybee\Modules\Editor\Collection;
 use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
@@ -62,7 +62,7 @@ class InactiveBlock extends ManageBlock
 			return;
 		}
 
-		$this->app->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
+		$this->app->events->attach(function(ActionBarToolbar\CollectEvent $event, ActionBarToolbar $target) {
 
 			$event->buttons[] = new Button('Enable selected modules', [
 

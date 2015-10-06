@@ -19,7 +19,7 @@ use ICanBoogie\Operation;
 use Brickrouge\Button;
 use Brickrouge\ListView;
 
-use Icybee\Element\ActionbarToolbar;
+use Icybee\Element\ActionBarToolbar;
 use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
 
@@ -148,7 +148,7 @@ EOT;
 
 	protected function attach_buttons()
 	{
-		$this->app->events->attach(function(ActionbarToolbar\CollectEvent $event, ActionbarToolbar $target) {
+		$this->app->events->attach(function(ActionBarToolbar\CollectEvent $event, ActionBarToolbar $target) {
 
 			$event->buttons[] = new Button('Disable selected modules', [
 

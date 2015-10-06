@@ -17,7 +17,7 @@ use ICanBoogie\Operation;
 use Brickrouge\ListViewColumn;
 
 use Icybee\Modules\Modules\Block\ManageBlock;
-use Icybee\WrappedCheckbox;
+use Icybee\Element\WrappedCheckbox;
 
 /**
  * Representation of the `key` column.

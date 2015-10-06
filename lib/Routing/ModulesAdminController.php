@@ -39,6 +39,12 @@ class ModulesAdminController extends AdminController
 		return parent::action($request);
 	}
 
+	/**
+	 * @param $module_id
+	 *
+	 * @return \ICanBoogie\HTTP\RedirectResponse
+	 * @throws \Exception
+	 */
 	protected function action_install($module_id)
 	{
 		$module = $this->modules[$module_id];
@@ -51,20 +57,7 @@ class ModulesAdminController extends AdminController
 		return $this->redirect($this->request->referer);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	protected function is_action_method($action)
-	{
-		if (in_array($action, [ 'inactive' ]))
-		{
-			return true;
-		}
-
-		return parent::is_action_method($action);
-	}
-
-	protected function inactive()
+	protected function action_inactive()
 	{
 		$this->view->content = $this->module->getBlock('inactive');
 		$this->view['block_name'] = 'inactive';
