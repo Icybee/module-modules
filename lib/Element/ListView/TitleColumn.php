@@ -27,6 +27,8 @@ use Icybee\Modules\Modules\Block\ManageBlock;
  */
 class TitleColumn extends ListViewColumn
 {
+	private $app;
+
 	public function __construct(ManageBlock $listview, $id, array $options = [])
 	{
 		parent::__construct($listview, $id, $options + [
@@ -34,6 +36,8 @@ class TitleColumn extends ListViewColumn
 			'title' => 'Module'
 
 		]);
+
+		$this->app = $listview->app;
 	}
 
 	public function render_cell($descriptor)

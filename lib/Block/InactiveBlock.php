@@ -27,7 +27,7 @@ class InactiveBlock extends ManageBlock
 	{
 		parent::__construct($module, $attributes + [
 
-			self::ENTRIES => $this->app->modules->disabled_modules_descriptors,
+			self::RECORDS => $this->app->modules->disabled_modules_descriptors,
 			self::COLUMNS => [
 
 				'key' =>        Columns\KeyColumn::class,
@@ -40,7 +40,7 @@ class InactiveBlock extends ManageBlock
 
 	protected function render_inner_html()
 	{
-		if (!$this->entries)
+		if (!$this->records)
 		{
 			return new Alert("All modules are active.", [
 
@@ -57,7 +57,7 @@ class InactiveBlock extends ManageBlock
 
 	protected function attach_buttons()
 	{
-		if (!$this->entries)
+		if (!$this->records)
 		{
 			return;
 		}

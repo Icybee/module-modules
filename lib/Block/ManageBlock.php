@@ -19,6 +19,7 @@ use ICanBoogie\Operation;
 use Brickrouge\Button;
 use Brickrouge\ListView;
 
+use ICanBoogie\PrototypeTrait;
 use Icybee\Element\ActionBarToolbar;
 use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
@@ -38,7 +39,7 @@ class ManageBlock extends ListView
 
 	protected $module;
 
-	public function __construct(Module $module, array $attributes=[])
+	public function __construct(Module $module, array $attributes = [])
 	{
 		$app = $this->app;
 		$this->module = $module;
@@ -50,7 +51,7 @@ class ManageBlock extends ListView
 
 		parent::__construct($attributes + [
 
-			self::ENTRIES => array_values($app->modules->enabled_modules_descriptors),
+			self::RECORDS => array_values($app->modules->enabled_modules_descriptors),
 			self::COLUMNS => [
 
 				'key' =>        Columns\KeyColumn::class,
@@ -72,9 +73,9 @@ class ManageBlock extends ListView
 	 * `__i18n_title` and `__i18n_category` respectively. The entries (descriptors) are ordered
 	 * according to their translated title.
 	 */
-	protected function get_entries()
+	protected function get_records()
 	{
-		$entries = parent::get_entries();
+		$entries = parent::get_records();
 
 		foreach ($entries as &$descriptor)
 		{
@@ -96,7 +97,7 @@ class ManageBlock extends ListView
 	protected function render_rows(array $rows)
 	{
 		$rendered_rows = parent::render_rows($rows);
-		$entries = $this->entries;
+		$entries = $this->records;
 		$grouped = [];
 
 		foreach ($rendered_rows as $i => $row)

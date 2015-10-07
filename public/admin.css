@@ -15,27 +15,29 @@
 .listview .cell--key input:disabled {
 	visibility: hidden;
 }
-
 .listview .cell--title {
-	padding-top: 1em;
-	padding-bottom: 1em;
 	max-width: 48ex;
 }
 
-.listview .cell--title .small {
+.listview tbody .cell--title {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.listview tbody .cell--title .small {
 	margin-top: .5em;
 }
 
-.listview .cell--dependency {
+.listview tbody .cell--dependency {
 	font-size: .8571em;
 	line-height: 1.5em;
 }
 
-.listview .cell--install .alert {
+.listview tbody .cell--install .alert {
 	margin: 0;
 }
 
-.listview .cell--install .not-applicable {
+.listview tbody .cell--install .not-applicable {
 	font-size: .8571em;
 }
 

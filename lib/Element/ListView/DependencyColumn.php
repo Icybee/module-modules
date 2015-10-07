@@ -25,6 +25,8 @@ use Icybee\Modules\Modules\Block\ManageBlock;
  */
 class DependencyColumn extends ListViewColumn
 {
+	private $modules;
+
 	public function __construct(ManageBlock $listview, $id, array $options = [])
 	{
 		parent::__construct($listview, $id, $options + [
@@ -32,6 +34,8 @@ class DependencyColumn extends ListViewColumn
 			'title' => 'Dependency'
 
 		]);
+
+		$this->modules = $listview->app->modules;
 	}
 
 	/**
@@ -117,7 +121,7 @@ EOT;
 	protected function render_module_users(array $descriptor)
 	{
 		$module_id = $descriptor[Descriptor::ID];
-		$descriptors = $this->app->modules->filter_descriptors_by_users($module_id);
+		$descriptors = $this->modules->filter_descriptors_by_users($module_id);
 
 		if (!$descriptors)
 		{
@@ -142,7 +146,7 @@ EOT;
 	protected function create_modules_labels(array $module_id_collection)
 	{
 		$labels = [];
-		$modules = $this->app->modules;
+		$modules = $this->modules;
 
 		foreach ($module_id_collection as $module_id)
 		{
