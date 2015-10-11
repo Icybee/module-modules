@@ -19,7 +19,7 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.5.0",
-	  	"icanboogie/routing": "^2.5.0",
+		"icanboogie/routing": "^3.0.0",
 		"icanboogie/module-installer": "^1.2.3",
 		"icanboogie/module": "^3.0.0",
 	  	"icanboogie/i18n": "^2.0.0",
