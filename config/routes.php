@@ -14,7 +14,7 @@ return Make::admin('modules', Routing\ModulesAdminController::class, [
 
 		'active' => [ '/{name}/active', Request::METHOD_ANY ],
 		'inactive' => [ '/{name}/inactive', Request::METHOD_ANY ],
-		'install' => [ '/{name}/<[^/]+>/install', Request::METHOD_ANY ]
+		'install' => [ '/{name}/:module_id/install', Request::METHOD_ANY ]
 
 	]
 
