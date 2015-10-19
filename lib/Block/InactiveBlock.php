@@ -23,7 +23,7 @@ use Icybee\Modules\Modules\Element\ListView as Columns;
 
 class InactiveBlock extends ManageBlock
 {
-	public function __construct(Module $module, array $attributes=[])
+	public function __construct(Module $module, array $attributes = [])
 	{
 		parent::__construct($module, $attributes + [
 
@@ -38,21 +38,21 @@ class InactiveBlock extends ManageBlock
 		]);
 	}
 
-	protected function render_inner_html()
+	/**
+	 * Renders a notice when there is no record to render.
+	 *
+	 * @return Alert
+	 */
+	protected function render_no_records()
 	{
-		if (!$this->records)
-		{
-			return new Alert("All modules are active.", [
+		return new Alert("All modules are active.", [
 
-				Alert::CONTEXT => Alert::CONTEXT_INFO,
-				Alert::UNDISMISSABLE => true,
+			Alert::UNDISMISSABLE => true,
+			Alert::CONTEXT => Alert::CONTEXT_INFO,
 
-				'class' => 'alert-block'
+			'class' => 'alert alert-block listview-alert'
 
-			]);
-		}
-
-		return parent::render_inner_html();
+		]);
 	}
 
 	protected function attach_buttons()

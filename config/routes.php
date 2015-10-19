@@ -3,13 +3,16 @@
 namespace Icybee\Modules\Modules;
 
 use ICanBoogie\HTTP\Request;
+use ICanBoogie\Routing\RouteDefinition;
+
 use Icybee\Routing\RouteMaker as Make;
 
 return Make::admin('modules', Routing\ModulesAdminController::class, [
 
-	'only' => [ Make::ACTION_INDEX, 'inactive', 'install' ],
-	'actions' => [
+	Make::OPTION_ONLY => [ 'active', 'inactive', 'install' ],
+	Make::OPTION_ACTIONS => [
 
+		'active' => [ '/{name}/active', Request::METHOD_ANY ],
 		'inactive' => [ '/{name}/inactive', Request::METHOD_ANY ],
 		'install' => [ '/{name}/<[^/]+>/install', Request::METHOD_ANY ]
 
@@ -17,10 +20,17 @@ return Make::admin('modules', Routing\ModulesAdminController::class, [
 
 ]) + [
 
+	'admin:modules:index' => [
+
+		RouteDefinition::PATTERN => '/admin/modules',
+		RouteDefinition::LOCATION => '/admin/modules/active'
+
+	],
+
 	'redirect:admin/features' => [
 
-		'pattern' => '/admin/features',
-		'location' => '/admin/modules'
+		RouteDefinition::PATTERN => '/admin/features',
+		RouteDefinition::LOCATION => '/admin/modules/active'
 
 	]
 
