@@ -24,12 +24,12 @@ class Module extends \Icybee\Module
 
 		if (!$app->user->has_permission(self::PERMISSION_ADMINISTER, $this))
 		{
-			return '<div class="alert alert-error">' . $app->translate('You don\'t have enought privileges to install packages.') . '</div>';
+			return '<div class="alert alert-danger">' . $app->translate('You don\'t have enought privileges to install packages.') . '</div>';
 		}
 
 		if (empty($app->modules[$module_id]))
 		{
-			return '<div class="alert alert-error">' . $app->translate('The module %module_id does not exists.', [ '%module_id' => $module_id ]) . '</div>';
+			return '<div class="alert alert-danger">' . $app->translate('The module %module_id does not exists.', [ '%module_id' => $module_id ]) . '</div>';
 		}
 
 		$errors = new \ICanBoogie\Errors;
@@ -39,7 +39,7 @@ class Module extends \Icybee\Module
 
 		if ($is_installed && !count($errors))
 		{
-			return '<div class="alert alert-error">' . $app->translate('The module %module is already installed', [ '%module' => $module_id ]) . '</div>';
+			return '<div class="alert alert-danger">' . $app->translate('The module %module is already installed', [ '%module' => $module_id ]) . '</div>';
 		}
 
 		$errors->clear();
@@ -47,7 +47,7 @@ class Module extends \Icybee\Module
 
 		if (!$is_installed || count($errors))
 		{
-			return '<div class="alert alert-error">' . $app->translate('Unable to install the module %module', [ '%module' => $module_id ]) . '</div>';
+			return '<div class="alert alert-danger">' . $app->translate('Unable to install the module %module', [ '%module' => $module_id ]) . '</div>';
 		}
 
 		return '<div class="alert alert-success">' . $app->translate('The module %module has been installed. <a href="' . $app->site->path . '/admin/' . $this . '">Retourner à la liste.</a>', [ '%module' => $module_id ]) . '</div>';

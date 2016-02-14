@@ -47,7 +47,7 @@ class InstallColumn extends ListViewColumn
 		}
 		catch (\Exception $e)
 		{
-			return '<div class="alert alert-error">' . $e->getMessage() . '</div>';
+			return '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
 		}
 
 		$html = '';
@@ -99,11 +99,7 @@ class InstallColumn extends ListViewColumn
 
 		if ($n_errors != count($errors))
 		{
-			$html .= new Alert($errors[$module_id], [
-
-				Alert::UNDISMISSABLE => true
-
-			]);
+			$html .= new Alert($errors[$module_id]);
 		}
 		else
 		{
@@ -155,7 +151,7 @@ class InstallColumn extends ListViewColumn
 					}
 
 					$html .= <<<EOT
-<div class="alert alert-error alert-block undismissable">
+<div class="alert alert-danger">
 	<h4 class="alert-heading">$title</h4>
 	<div class="content">
 		<p>$error</p>

@@ -47,7 +47,6 @@ class InactiveBlock extends ManageBlock
 	{
 		return new Alert("All modules are active.", [
 
-			Alert::UNDISMISSABLE => true,
 			Alert::CONTEXT => Alert::CONTEXT_INFO,
 
 			'class' => 'alert alert-block listview-alert'
