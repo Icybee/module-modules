@@ -11,7 +11,7 @@
 
 namespace Icybee\Modules\Modules\Routing;
 
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Module;
 
@@ -53,7 +53,7 @@ class ModulesAdminController extends AdminController
 	protected function action_install($module_id)
 	{
 		$module = $this->modules[$module_id];
-		$errors = new Errors;
+		$errors = new ErrorCollection;
 
 		if (!$module->install($errors)) {
 			throw new \Exception("Unable to install $module_id");

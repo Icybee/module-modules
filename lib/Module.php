@@ -32,7 +32,7 @@ class Module extends \Icybee\Module
 			return '<div class="alert alert-danger">' . $app->translate('The module %module_id does not exists.', [ '%module_id' => $module_id ]) . '</div>';
 		}
 
-		$errors = new \ICanBoogie\Errors;
+		$errors = new \ICanBoogie\ErrorCollection;
 		$module = $app->modules[$module_id];
 
 		$is_installed = $module->is_installed($errors);

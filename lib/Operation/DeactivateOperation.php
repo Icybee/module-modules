@@ -11,7 +11,7 @@
 
 namespace Icybee\Modules\Modules\Operation;
 
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\Operation;
 
 use Icybee\Binding\Core\PrototypedBindings;
@@ -41,7 +41,7 @@ class DeactivateOperation extends Operation
 	 *
 	 * @inheritdoc
 	 */
-	protected function validate(Errors $errors)
+	protected function validate(ErrorCollection $errors)
 	{
 		$app = $this->app;
 
@@ -53,7 +53,7 @@ class DeactivateOperation extends Operation
 
 				if ($n)
 				{
-					$errors->add(null, 'The module %title cannot be disabled, :count modules are using it.', [
+					$errors->add_generic("The module %title cannot be disabled, :count modules are using it.", [
 
 						'title' => $this->format($module_id, [], [ 'scope' => 'module_title' ]),
 						':count' => $n

@@ -11,7 +11,7 @@
 
 namespace Icybee\Modules\Modules\Element\ListView;
 
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 
@@ -55,8 +55,8 @@ class InstallColumn extends ListViewColumn
 
 		# EXTENDS
 
-		$errors = new Errors;
-		$extends_errors = new Errors;
+		$errors = new ErrorCollection;
+		$extends_errors = new ErrorCollection;
 		$n_errors = count($errors);
 
 		while ($descriptor[Descriptor::INHERITS])

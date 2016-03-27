@@ -11,7 +11,7 @@
 
 namespace Icybee\Modules\Modules\Operation;
 
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\Operation;
 
 use Icybee\Binding\Core\PrototypedBindings;
@@ -33,10 +33,13 @@ class ActivateOperation extends Operation
 		] + parent::get_controls();
 	}
 
-	protected function validate(Errors $errors)
+	/**
+	 * @inheritdoc
+	 */
+	protected function validate(ErrorCollection $errors)
 	{
 		$app = $this->app;
-		$install_errors = new Errors;
+		$install_errors = new ErrorCollection;
 
 		foreach ((array) $this->key as $key => $dummy)
 		{
@@ -59,11 +62,11 @@ class ActivateOperation extends Operation
 			catch (\Exception $e)
 			{
 				$app->modules[$key] = false;
-				$errors[] = $e->getMessage();
+				$errors->add_generic($e->getMessage());
 			}
 		}
 
-		return !count($errors);
+		return $errors;
 	}
 
 	protected function process()
