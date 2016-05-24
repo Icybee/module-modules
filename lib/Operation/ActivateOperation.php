@@ -38,15 +38,15 @@ class ActivateOperation extends Operation
 	 */
 	protected function validate(ErrorCollection $errors)
 	{
-		$app = $this->app;
+		$modules = $this->app->modules;
 		$install_errors = new ErrorCollection;
 
 		foreach ((array) $this->key as $key => $dummy)
 		{
 			try
 			{
-				$app->modules[$key] = true;
-				$module = $app->modules[$key];
+				$modules->enable($key);
+				$module = $modules[$key];
 				$install_errors->clear();
 				$rc = $module->is_installed($install_errors);
 
@@ -61,7 +61,7 @@ class ActivateOperation extends Operation
 			}
 			catch (\Exception $e)
 			{
-				$app->modules[$key] = false;
+				$modules->disable($key);
 				$errors->add_generic($e->getMessage());
 			}
 		}

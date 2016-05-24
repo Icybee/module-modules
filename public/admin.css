@@ -33,8 +33,21 @@
 	line-height: 1.5em;
 }
 
-.listview tbody .cell--install .alert {
+.cell--install .alert {
 	margin: 0;
+}
+
+.cell--install .alert p {
+	margin: 0;
+}
+
+.cell--install .alert-heading {
+	font-size: inherit;
+	font-weight: bold;
+}
+
+.cell--install .alert .alert-actions {
+	margin-top: 1em;
 }
 
 .listview tbody .cell--install .not-applicable {
