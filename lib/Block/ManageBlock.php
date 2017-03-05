@@ -12,20 +12,18 @@
 namespace Icybee\Modules\Modules\Block;
 
 use ICanBoogie\HTTP\PermissionRequired;
-use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Operation;
 
 use Brickrouge\Button;
 use Brickrouge\ListView;
 
-use ICanBoogie\PrototypeTrait;
 use Icybee\Element\ActionBarToolbar;
 use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
 
 /**
- * @property \Icybee\Binding\CoreBindings $app
+ * @property \ICanBoogie\Application $app
  */
 class ManageBlock extends ListView
 {
@@ -185,7 +183,7 @@ EOT;
 	}
 
 	/**
-	 * @return \ICanBoogie\Core|\Icybee\Binding\CoreBindings
+	 * @return \ICanBoogie\Application
 	 */
 	static private function app()
 	{

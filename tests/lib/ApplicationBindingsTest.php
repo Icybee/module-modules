@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace ICanBoogie;
+namespace Icybee\Modules\Modules;
 
-chdir(__DIR__);
+use function ICanBoogie\app;
 
-require __DIR__ . '/../vendor/autoload.php';
-
-$app = boot();
-$app->modules->install();
-
+class ApplicationBindingsTest extends \PHPUnit_Framework_TestCase
+{
+	public function testGetModules()
+	{
+		$this->assertInstanceOf(ModuleCollection::class, app()->modules);
+	}
+}

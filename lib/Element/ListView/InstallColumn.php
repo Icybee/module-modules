@@ -36,8 +36,6 @@ class InstallColumn extends ListViewColumn
 
 	public function render_cell($descriptor)
 	{
-		/* @var $app \ICanBoogie\Core|\ICanBoogie\Module\CoreBindings */
-
 		$app = \ICanBoogie\app();
 		$module_id = $descriptor[Descriptor::ID];
 

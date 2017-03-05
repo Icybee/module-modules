@@ -11,10 +11,7 @@
 
 namespace ICanBoogie;
 
-chdir(__DIR__);
+class Application extends Core
+{
 
-require __DIR__ . '/../vendor/autoload.php';
-
-$app = boot();
-$app->modules->install();
-
+}

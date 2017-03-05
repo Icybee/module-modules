@@ -11,18 +11,18 @@
 
 namespace Icybee\Modules\Modules;
 
-use ICanBoogie\Core;
+use ICanBoogie\Application;
 
 class Hooks
 {
 	/**
 	 * Override the method to provide our own accessor.
 	 *
-	 * @param Core $app
+	 * @param Application $app
 	 *
 	 * @return ModuleCollection
 	 */
-	static public function get_modules(Core $app)
+	static public function get_modules(Application $app)
 	{
 		$config = $app->config;
 

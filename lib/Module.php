@@ -11,7 +11,7 @@
 
 namespace Icybee\Modules\Modules;
 
-use ICanBoogie\I18n;
+use ICanBoogie\ErrorCollection;
 
 class Module extends \Icybee\Module
 {
@@ -32,7 +32,7 @@ class Module extends \Icybee\Module
 			return '<div class="alert alert-danger">' . $app->translate('The module %module_id does not exists.', [ '%module_id' => $module_id ]) . '</div>';
 		}
 
-		$errors = new \ICanBoogie\ErrorCollection;
+		$errors = new ErrorCollection;
 		$module = $app->modules[$module_id];
 
 		$is_installed = $module->is_installed($errors);

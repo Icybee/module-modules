@@ -11,16 +11,17 @@
 
 namespace Icybee\Modules\Modules\Routing;
 
+use ICanBoogie\Binding\PrototypedBindings;
 use ICanBoogie\ErrorCollection;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Module;
 
-use Icybee\Binding\PrototypedBindings;
 use Icybee\Routing\AdminController;
 
 class ModulesAdminController extends AdminController
 {
-	use PrototypedBindings, Module\CoreBindings;
+	use PrototypedBindings;
+	use Module\CoreBindings;
 
 	/**
 	 * Clears module cache before doing anything.

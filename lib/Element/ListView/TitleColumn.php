@@ -12,7 +12,6 @@
 namespace Icybee\Modules\Modules\Element\ListView;
 
 use Brickrouge\A;
-use ICanBoogie\I18n;
 use ICanBoogie\Module\Descriptor;
 
 use Brickrouge\ListViewColumn;
@@ -23,7 +22,7 @@ use Icybee\Modules\Modules\Block\ManageBlock;
 /**
  * Representation of the `title` column.
  *
- * @property-read \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
+ * @property-read \ICanBoogie\Application $app
  */
 class TitleColumn extends ListViewColumn
 {

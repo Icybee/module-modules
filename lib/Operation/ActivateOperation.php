@@ -11,10 +11,10 @@
 
 namespace Icybee\Modules\Modules\Operation;
 
+use ICanBoogie\Binding\PrototypedBindings;
 use ICanBoogie\ErrorCollection;
 use ICanBoogie\Operation;
 
-use Icybee\Binding\Core\PrototypedBindings;
 use Icybee\Modules\Modules\Module;
 
 /**

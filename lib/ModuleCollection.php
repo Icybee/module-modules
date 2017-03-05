@@ -11,7 +11,6 @@
 
 namespace Icybee\Modules\Modules;
 
-use ICanBoogie\Core;
 use ICanBoogie\Module\Descriptor;
 
 /**

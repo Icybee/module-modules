@@ -21,7 +21,7 @@ use Icybee\Modules\Modules\Block\ManageBlock;
 /**
  * Representation of the `dependency` column.
  *
- * @property \ICanBoogie\Core|\Icybee\Binding\CoreBindings $app
+ * @property \ICanBoogie\Application $app
  */
 class DependencyColumn extends ListViewColumn
 {
