@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Modules\Element\ListView;
 
+use function ICanBoogie\app;
 use ICanBoogie\Module\Descriptor;
 use ICanBoogie\Routing\RouteNotDefined;
 
@@ -28,7 +29,7 @@ class ConfigureColumn extends ListViewColumn
 
 	public function __construct(ManageBlock $listview, $id, array $options = [])
 	{
-		$this->routes = \ICanBoogie\app()->routes;
+		$this->routes = app()->routes;
 
 		parent::__construct($listview, $id, $options + [
 
