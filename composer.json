@@ -19,6 +19,8 @@
 		"source": "https://github.com/Icybee/module-modules"
 	},
 	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"prefer-dist": true,
 	"require": {
 		"php": ">=5.6",
 		"icanboogie/module": "^4.0",
