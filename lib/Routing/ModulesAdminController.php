@@ -21,7 +21,7 @@ use Icybee\Routing\AdminController;
 class ModulesAdminController extends AdminController
 {
 	use PrototypedBindings;
-	use Module\CoreBindings;
+	use Module\ApplicationBindings;
 
 	/**
 	 * Clears module cache before doing anything.
