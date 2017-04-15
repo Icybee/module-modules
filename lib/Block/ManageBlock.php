@@ -13,12 +13,9 @@ namespace Icybee\Modules\Modules\Block;
 
 use ICanBoogie\HTTP\PermissionRequired;
 use ICanBoogie\Module\Descriptor;
-use ICanBoogie\Operation;
 
-use Brickrouge\Button;
 use Brickrouge\ListView;
 
-use Icybee\Element\ActionBarToolbar;
 use Icybee\Modules\Modules\Module;
 use Icybee\Modules\Modules\Element\ListView as Columns;
 
@@ -49,10 +46,9 @@ class ManageBlock extends ListView
 
 		parent::__construct($attributes + [
 
-			self::RECORDS => array_values($app->modules->enabled_modules_descriptors),
+			self::RECORDS => array_values($app->modules->descriptors),
 			self::COLUMNS => [
 
-				'key' =>        Columns\KeyColumn::class,
 				'title' =>      Columns\TitleColumn::class,
 				'dependency' => Columns\DependencyColumn::class,
 				'install' =>    Columns\InstallColumn::class,
@@ -62,8 +58,6 @@ class ManageBlock extends ListView
 
 			'class' => 'form-primary'
 		]);
-
-		$this->attach_buttons();
 	}
 
 	/**
@@ -125,38 +119,6 @@ EOT;
 		}
 
 		return $rendered_rows;
-	}
-
-	protected function decorate($html)
-	{
-		$operation_destination_name = Operation::DESTINATION;
-		$operation_destination_value = $this->module->id;
-		$operation_name = Operation::NAME;
-		// TODO-20130702: Fix the following hack:
-		$operation_value = ($this instanceof InactiveBlock) ? Module::OPERATION_ACTIVATE : Module::OPERATION_DEACTIVATE;
-
-		return <<<EOT
-<form action="" method="POST" class="form-primary">
-	<input type="hidden" name="{$operation_destination_name}" value="$operation_destination_value" />
-	<input type="hidden" name="{$operation_name}" value="$operation_value" />
-
-	$html
-</form>
-EOT;
-	}
-
-	protected function attach_buttons()
-	{
-		$this->app->events->attach(function(ActionBarToolbar\CollectEvent $event, ActionBarToolbar $target) {
-
-			$event->buttons[] = new Button('Disable selected modules', [
-
-				'class' => 'btn-primary btn-danger',
-				'type' => 'submit',
-				'data-target' => '.form-primary'
-			]);
-
-		});
 	}
 
 	static public function resolve_module_title($module_id)

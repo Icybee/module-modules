@@ -63,15 +63,9 @@ class ModulesAdminController extends AdminController
 		return $this->redirect($this->request->referer);
 	}
 
-	protected function action_active()
+	protected function action_index()
 	{
 		$this->view->content = $this->module->getBlock('manage');
 		$this->view['block_name'] = 'manage';
-	}
-
-	protected function action_inactive()
-	{
-		$this->view->content = $this->module->getBlock('inactive');
-		$this->view['block_name'] = 'inactive';
 	}
 }

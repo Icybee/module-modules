@@ -15,9 +15,6 @@ use ICanBoogie\ErrorCollection;
 
 class Module extends \Icybee\Module
 {
-	const OPERATION_ACTIVATE = 'activate';
-	const OPERATION_DEACTIVATE = 'deactivate';
-
 	protected function block_install($module_id)
 	{
 		$app = $this->app;
